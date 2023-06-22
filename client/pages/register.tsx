@@ -6,28 +6,37 @@ const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const handleRegister = async (e: any) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post("http://localhost:8000/api/register", {
-        username,
-        password,
-        email,
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/register",
+        JSON.stringify({
+          username,
+          password,
+          email,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            bodyParser: false,
+          },
+        }
+      );
 
       // Handle the successful registration response
       console.log(response.data);
+      setError("Registration successful");
     } catch (error: any) {
       // Handle registration error
-      setError(error.response.data.message);
+      setError(error.response);
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
+    <form method="POST" onSubmit={handleRegister}>
       {/* Form inputs */}
       <div>
         <label>Username:</label>
@@ -54,7 +63,9 @@ const RegisterPage = () => {
         />
       </div>
 
-      <button type="submit">Register</button>
+      <button type="submit" onClick={handleRegister}>
+        Register
+      </button>
 
       {error && <p>{error}</p>}
     </form>
