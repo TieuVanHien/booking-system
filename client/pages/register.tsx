@@ -12,14 +12,13 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/register", {
+      const response = await axios.post("/api/register", {
         username,
         email,
         password,
       });
 
-      if (response.status === 200) {
-        // Registration successful
+      if (response.status === 200 || response.status === 201) {
         console.log(response.data);
       } else {
         // Registration failed
@@ -58,9 +57,7 @@ const RegisterPage = () => {
         />
       </div>
 
-      <button type="submit" onClick={handleSubmit}>
-        Register
-      </button>
+      <button type="submit">Register</button>
 
       {error && <p>{error}</p>}
     </form>
