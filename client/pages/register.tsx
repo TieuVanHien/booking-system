@@ -8,35 +8,30 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  const handleRegister = async (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/register",
-        JSON.stringify({
-          username,
-          password,
-          email,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            bodyParser: false,
-          },
-        }
-      );
 
-      // Handle the successful registration response
-      console.log(response.data);
-      setError("Registration successful");
-    } catch (error: any) {
-      // Handle registration error
-      setError(error.response);
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/register", {
+        username,
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        // Registration successful
+        console.log(response.data);
+      } else {
+        // Registration failed
+        console.error("Registration failed");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
     }
   };
 
   return (
-    <form method="POST" onSubmit={handleRegister}>
+    <form method="POST" onSubmit={handleSubmit}>
       {/* Form inputs */}
       <div>
         <label>Username:</label>
@@ -63,7 +58,7 @@ const RegisterPage = () => {
         />
       </div>
 
-      <button type="submit" onClick={handleRegister}>
+      <button type="submit" onClick={handleSubmit}>
         Register
       </button>
 

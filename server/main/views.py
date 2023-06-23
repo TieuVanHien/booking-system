@@ -35,6 +35,5 @@ def register(request):
             User.objects.create_user(username=username, password=password, email=email)
             return JsonResponse({'message': 'Registration successful'})
         except:
-            return JsonResponse({'message': 'Registration failed'})
-    
+            return JsonResponse({'message': 'Registration failed'}) 
     return JsonResponse({'message': 'Invalid request method'})
