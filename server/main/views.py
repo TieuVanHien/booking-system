@@ -36,8 +36,25 @@ def register(request):
 
             User.objects.create_user(username=username, password=password, email=email)
             return JsonResponse({'message': 'Registration successful'}, status=201)
+        
         except Exception as e:
             print(e)
             return JsonResponse({'message': 'Registration failed'}, status=500)
+    if request.method == 'GET':
+        try:
+            users = User.objects.all()
+            # Create a list to store user data
+            users_data = []
+            # Iterate over each user and add their information to the list
+            for user in users:
+                user_data = {
+                    'username': user.username,
+                    'email': user.email,
+                }
+                users_data.append(user_data)
+            return JsonResponse(user_data, status=200, safe=False)
+        except Exception as e:
+            print(e)
+            return JsonResponse({'message': 'Failed to retrieve user information'}, status=500) 
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=405)
