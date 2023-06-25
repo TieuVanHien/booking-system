@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -20,6 +22,8 @@ const RegisterPage = () => {
 
       if (response.status === 200 || response.status === 201) {
         console.log(response.data);
+        // Redirect user to a success page or any desired route
+        router.push("/login");
       } else {
         // Registration failed
         console.error("Registration failed");
