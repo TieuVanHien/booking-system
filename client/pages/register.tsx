@@ -12,7 +12,6 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
     try {
       const response = await axios.post("/api/register", {
         username,
@@ -22,7 +21,9 @@ const RegisterPage = () => {
 
       if (response.status === 200 || response.status === 201) {
         console.log(response.data);
-        // Redirect user to a success page or any desired route
+        setUsername("");
+        setEmail("");
+        setPassword("");
         router.push("/login");
       } else {
         // Registration failed
@@ -40,6 +41,7 @@ const RegisterPage = () => {
         <label>Username:</label>
         <input
           type="text"
+          className="text-black"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -48,6 +50,7 @@ const RegisterPage = () => {
         <label>Email:</label>
         <input
           type="text"
+          className="text-black"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -56,6 +59,7 @@ const RegisterPage = () => {
         <label>Password:</label>
         <input
           type="password"
+          className="text-black"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
