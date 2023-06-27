@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login as auth_login
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
+import json
+
 import json
 
 User = get_user_model()
@@ -11,9 +13,25 @@ User = get_user_model()
 def hello(request):
     return HttpResponse('Hello, world')
 
-def get_csrf_token(request):
-    csrftoken = get_token(request)
-    return JsonResponse({'csrftoken': csrftoken})
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email = data.get("email")
+            password = data.get("password")
+            if not email or not password:
+                return JsonResponse({'message': 'Invalid password or email'}, status=400)
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return JsonResponse({'message': 'Login successful'})
+            # Return an error response
+            return JsonResponse({'message': 'Invalid credentials'}, status=400)           
+        except Exception as e:
+            print(e)
+            return JsonResponse({'message': 'Failed to retrieve user information'}, status=500) 
+    return JsonResponse({'message': 'Invalid email or password'}, status=400)             
 
 @csrf_exempt
 def register(request):
@@ -23,11 +41,6 @@ def register(request):
             username = data.get('username')
             password = data.get('password')
             email = data.get('email')
-            print(data)
-            print(username)
-            print(password)
-            print(email)
-
             if not username or not password or not email:
                 return JsonResponse({'message': 'Username, password, and email are required'}, status=400)
 
@@ -58,3 +71,4 @@ def register(request):
             return JsonResponse({'message': 'Failed to retrieve user information'}, status=500) 
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=405)
+
