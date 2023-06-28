@@ -20,14 +20,15 @@ def login(request):
             data = json.loads(request.body)
             email = data.get("email")
             password = data.get("password")
+            print(email, password)
             if not email or not password:
                 return JsonResponse({'message': 'Invalid password or email'}, status=400)
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 auth_login(request, user)
-                return JsonResponse({'message': 'Login successful'})
-            # Return an error response
-            return JsonResponse({'message': 'Invalid credentials'}, status=400)           
+                return JsonResponse({'message': 'Login successful'}, status=200)
+            else:
+                return JsonResponse({'message': 'Invalid credentials'}, status=400)           
         except Exception as e:
             print(e)
             return JsonResponse({'message': 'Failed to retrieve user information'}, status=500) 

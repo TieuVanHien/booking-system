@@ -1,37 +1,35 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [loginError, setLoginError] = useState("");
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
     console.log("Login");
     try {
-      const res = await axios.post(
-        "/api/login",
-        {
+      const res = await fetch("api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           email,
           password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        }),
+      });
       if (res.status === 200) {
-        console.log("logging in...");
-        // router.push("/home");
+        router.push("/home");
       } else {
-        console.log("Failed to login");
+        setLoginError("Invalid email or password"); // Set error message
       }
     } catch (err) {
       console.log("Error: ", err);
+      setLoginError("Error occurred"); // Set error message
     }
   };
 
@@ -61,6 +59,7 @@ const Login = () => {
           Login
         </button>
       </form>
+      {loginError && <p>{loginError}</p>}
     </div>
   );
 };

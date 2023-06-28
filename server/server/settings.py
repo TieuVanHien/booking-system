@@ -72,6 +72,11 @@ CORS_ALLOW_CREDENTIALS: True
 
 ROOT_URLCONF = 'server.urls'
 
+AUTHENTICATION_BACKENDS = [
+    'main.auth.CustomBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 AUTH_USER_MODEL = 'main.CustomUser'
 
 TEMPLATES = [
