@@ -10,9 +10,26 @@ body {
   height: 100%;
   width: 100%;
   padding: 0;
+  font-family: 'Poppins', sans-serif;
+  label {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    color: #7c838a;
+    font-size: 1.1em;
+  }
+  input {
+    height: 2.2em;
+    background: rgba(176, 186, 195, 0.4);
+    border-radius: 0.5em;
+    padding-left: 0.5em;
+  }
 }
 #__next {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 @for $index from 1 through 6 {
@@ -44,22 +61,5 @@ h5 {
 // main {
 //   width: 100%;
 //   height: 100vh;
-//   font-family: 'Poppins', sans-serif;
-//   background-image: url('/images/background.png');
-//   background-repeat: none;
-//   background-size: cover;
-//   label {
-//     font-family: Poppins;
-//     font-style: normal;
-//     font-weight: 500;
-//     color: #7c838a;
-//     font-size: 1.1em;
-//   }
-//   input {
-//     height: 2.2em;
-//     background: rgba(176, 186, 195, 0.4);
-//     width: 100%;
-//     border-radius: 0.5em;
-//     padding-left: 0.5em;
-//   }
+
 // }

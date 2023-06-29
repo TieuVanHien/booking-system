@@ -1,9 +1,12 @@
-.container {
+.register-page {
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url('/images/background.png');
+  background-repeat: none;
+  background-size: cover;
 }
 
 .register {

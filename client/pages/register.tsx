@@ -39,7 +39,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <section className="container">
+    <div className="register-page">
       <div className="register flex justify-center items-center">
         <div className="left">
           <Image
@@ -57,7 +57,7 @@ const RegisterPage = () => {
           <h3>Create Your Free Account</h3>
           <div className="form">
             <div className="flex flex-col">
-              <label>Username:</label>
+              <label className="mb-1">Username:</label>
               <input
                 type="text"
                 className="text-black"
@@ -67,7 +67,7 @@ const RegisterPage = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label>Email:</label>
+              <label className="mb-1">Email:</label>
               <input
                 type="text"
                 className="text-black"
@@ -77,7 +77,7 @@ const RegisterPage = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label>Password:</label>
+              <label className="mb-1">Password:</label>
               <input
                 type="password"
                 className="text-black"
@@ -100,7 +100,7 @@ const RegisterPage = () => {
           </Link>
         </form>
       </div>
-    </section>
+    </div>
   );
 };
 
