@@ -1,8 +1,10 @@
+import HomePage from '@/pages/home';
 import RegisterPage from '@/pages/register';
 export default function Home() {
   return (
-    <main className="flex justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
+      <HomePage />
       <RegisterPage />
-    </main>
+    </div>
   );
 }

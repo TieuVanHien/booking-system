@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      '/': { page: '/home' },
+      '/register': { page: '/register', query: { title: 'registration page' } },
+      '/login': { page: '/login', query: { title: 'login page' } }
+    };
+  },
   theme: {
     extend: {
       colors: {

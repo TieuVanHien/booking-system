@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { login } from '../public/images';
 import Link from 'next/link';
+import '../styles/register.scss';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -38,66 +39,68 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="register flex justify-center items-center">
-      <div className="left">
-        <Image
-          src={login}
-          width={450}
-          height={450}
-          alt="Picture of the author"
-        />
-      </div>
-      <form
-        method="POST"
-        className="right flex flex-col items-center"
-        onSubmit={handleSubmit}
-      >
-        <h3>Create Your Free Account</h3>
-        <div className="form">
-          <div className="flex flex-col">
-            <label>Username:</label>
-            <input
-              type="text"
-              className="text-black"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your Username"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label>Email:</label>
-            <input
-              type="text"
-              className="text-black"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your Email"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label>Password:</label>
-            <input
-              type="password"
-              className="text-black"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your Password"
-            />
-          </div>
+    <section className="container">
+      <div className="register flex justify-center items-center">
+        <div className="left">
+          <Image
+            src={login}
+            width={450}
+            height={450}
+            alt="Picture of the author"
+          />
         </div>
-        <button
-          className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded"
-          type="submit"
+        <form
+          method="POST"
+          className="right flex flex-col items-center"
+          onSubmit={handleSubmit}
         >
-          Create Account
-        </button>
-        {error && <p>{error}</p>}
-        <Link className="mt-4" href="/login">
-          Already have an account?
-          <span className="ml-1 text-yellow-500">Log in</span>
-        </Link>
-      </form>
-    </div>
+          <h3>Create Your Free Account</h3>
+          <div className="form">
+            <div className="flex flex-col">
+              <label>Username:</label>
+              <input
+                type="text"
+                className="text-black"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your Username"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Email:</label>
+              <input
+                type="text"
+                className="text-black"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your Email"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label>Password:</label>
+              <input
+                type="password"
+                className="text-black"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your Password"
+              />
+            </div>
+          </div>
+          <button
+            className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded"
+            type="submit"
+          >
+            Create Account
+          </button>
+          {error && <p>{error}</p>}
+          <Link className="mt-4" href="/login">
+            Already have an account?
+            <span className="ml-1 text-yellow-500">Log in</span>
+          </Link>
+        </form>
+      </div>
+    </section>
   );
 };
 

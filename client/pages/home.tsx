@@ -1,8 +1,13 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-const Home = () => {
-  return <h1>Home</h1>;
+const HomePage = () => {
+  return (
+    <div className="">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </div>
+  );
 };
 
-export default Home;
+export default HomePage;
