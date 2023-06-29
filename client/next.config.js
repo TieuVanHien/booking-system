@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  experimental: { css: true },
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
-  },
+  theme: {
+    extend: {
+      colors: {
+        yellow: '#F9ED32'
+      }
+    }
+  }
 };

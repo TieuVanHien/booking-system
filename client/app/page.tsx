@@ -1,9 +1,7 @@
-import RegisterPage from "@/pages/register";
-import LoginPage from "@/pages/login";
+import RegisterPage from '@/pages/register';
 export default function Home() {
   return (
-    <main className="">
-      <h1>Hello</h1>
+    <main className="flex justify-center items-center">
       <RegisterPage />
     </main>
   );
