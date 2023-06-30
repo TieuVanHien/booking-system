@@ -1,66 +1,100 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { login } from '../public/images';
+import Link from 'next/link';
+import '../styles/login.scss';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
-  const [loginError, setLoginError] = useState("");
+  const [loginError, setLoginError] = useState('');
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    console.log("Login");
+    console.log('Login');
     try {
-      const res = await fetch("api/login", {
-        method: "POST",
+      const res = await fetch('api/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email,
-          password,
-        }),
+          password
+        })
       });
       if (res.status === 200) {
-        router.push("/home");
+        router.push('/user');
       } else {
-        setLoginError("Invalid email or password"); // Set error message
+        setLoginError('Invalid email or password'); // Set error message
       }
     } catch (err) {
-      console.log("Error: ", err);
-      setLoginError("Error occurred"); // Set error message
+      console.log('Error: ', err);
+      setLoginError('Error occurred'); // Set error message
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="text"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <section className="login-page">
+      <div className="login flex justify-center items-center">
+        <div className="left">
+          <Image src={login} width={450} height={450} alt="login page image" />
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" onClick={handleLogin}>
-          Login
-        </button>
-      </form>
-      {loginError && <p>{loginError}</p>}
-    </div>
+        <form
+          method="POST"
+          className="right flex flex-col items-center"
+          onSubmit={handleLogin}
+        >
+          <h3>Sign In To Your Account</h3>
+          <div className="form">
+            <div className="flex flex-col">
+              <label className="mb-1">Email:</label>
+              <input
+                type="text"
+                className="text-black"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter Your Email"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1">Password:</label>
+              <input
+                type="password"
+                className="text-black"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter Your Password"
+              />
+            </div>
+          </div>
+          <button
+            className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded"
+            type="submit"
+          >
+            Sign In
+          </button>
+          {loginError && <p className="mt-4">{loginError}</p>}
+          <div className="mt-6 text-xs flex justify-around items-center">
+            <Link className="mt-4 mr-16" href="/register">
+              <span className="ml-1 text-yellow-500 hover:text-yellow-700">
+                Sign Up
+              </span>
+              For New Account
+            </Link>
+            <Link
+              className="mt-4 ml-12 hover:text-yellow-500"
+              href="/forgotpassword"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 };
 
