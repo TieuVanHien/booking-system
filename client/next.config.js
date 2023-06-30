@@ -7,7 +7,11 @@ module.exports = {
     return {
       '/': { page: '/home' },
       '/register': { page: '/register', query: { title: 'registration page' } },
-      '/login': { page: '/login', query: { title: 'login page' } }
+      '/login': { page: '/login', query: { title: 'login page' } },
+      '/forgotpassword': {
+        page: '/forgotpassword',
+        query: { title: 'forgotpassword page' }
+      }
     };
   },
   theme: {

@@ -48,7 +48,7 @@ const Login = () => {
           className="right flex flex-col items-center"
           onSubmit={handleLogin}
         >
-          <h3>Sign In To Your Account</h3>
+          <h3 className="mb-8">Sign In To Your Account</h3>
           <div className="form">
             <div className="flex flex-col">
               <label className="mb-1">Email:</label>
@@ -72,16 +72,19 @@ const Login = () => {
             </div>
           </div>
           <button
-            className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded"
+            className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18"
             type="submit"
           >
             Sign In
           </button>
           {loginError && <p className="mt-4">{loginError}</p>}
-          <div className="mt-6 text-xs flex justify-around items-center">
+          <div
+            className="mt-4
+           text-xs flex justify-around items-center"
+          >
             <Link className="mt-4 mr-16" href="/register">
               <span className="ml-1 text-yellow-500 hover:text-yellow-700">
-                Sign Up
+                Sign Up{' '}
               </span>
               For New Account
             </Link>

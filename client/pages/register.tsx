@@ -54,7 +54,7 @@ const RegisterPage = () => {
           className="right flex flex-col items-center"
           onSubmit={handleSubmit}
         >
-          <h3>Create Your Free Account</h3>
+          <h3 className="mb-6">Create Your Free Account</h3>
           <div className="form">
             <div className="flex flex-col">
               <label className="mb-1">Username:</label>
