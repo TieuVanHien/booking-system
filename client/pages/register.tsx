@@ -13,9 +13,21 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const [emailError, setEmailError] = useState('');
 
+  const validateEmail = (email: any) => {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email address');
+      return;
+    }
+    if (emailError) {
+      setEmailError('');
+    }
     try {
       const response = await axios.post('/api/register', {
         username,
@@ -32,9 +44,11 @@ const RegisterPage = () => {
       } else {
         // Registration failed
         console.error('Registration failed');
+        setError('An error occurred');
       }
     } catch (error) {
       console.error('An error occurred:', error);
+      setError('An error occurred');
     }
   };
 
@@ -93,7 +107,8 @@ const RegisterPage = () => {
           >
             Create Account
           </button>
-          {error && <p>{error}</p>}
+          {error && <p className="mt-2">{error}</p>}
+          {emailError && <p className="mt-2">{emailError}</p>}
           <span className="mt-4 text-xs">
             Already have an account?
             <Link href="/login" className="ml-1 text-yellow-500">
