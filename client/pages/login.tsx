@@ -82,12 +82,15 @@ const Login = () => {
             className="mt-4
            text-xs flex justify-around items-center"
           >
-            <Link className="mt-4 mr-16" href="/register">
-              <span className="ml-1 text-yellow-500 hover:text-yellow-700">
+            <span className="mt-4 mr-16">
+              <Link
+                href="/register"
+                className="ml-1 text-yellow-500 hover:text-yellow-700"
+              >
                 Sign Up{' '}
-              </span>
+              </Link>
               For New Account
-            </Link>
+            </span>
             <Link
               className="mt-4 ml-12 hover:text-yellow-500"
               href="/forgotpassword"

@@ -94,10 +94,12 @@ const RegisterPage = () => {
             Create Account
           </button>
           {error && <p>{error}</p>}
-          <Link className="mt-4" href="/login">
+          <span className="mt-4 text-xs">
             Already have an account?
-            <span className="ml-1 text-yellow-500">Log in</span>
-          </Link>
+            <Link href="/login" className="ml-1 text-yellow-500">
+              Log in
+            </Link>
+          </span>
         </form>
       </div>
     </div>
