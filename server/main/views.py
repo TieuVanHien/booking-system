@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
 import json
 
@@ -26,13 +29,15 @@ def login(request):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 auth_login(request, user)
-                return JsonResponse({'message': 'Login successful'}, status=200)
+                # return JsonResponse({'message': 'Login successful', 'user': {'username': user.username, 'email': user.email}}, status=200)
+                return redirect('/user')
             else:
                 return JsonResponse({'message': 'Invalid credentials'}, status=400)           
         except Exception as e:
             print(e)
             return JsonResponse({'message': 'Failed to retrieve user information'}, status=500) 
-    return JsonResponse({'message': 'Invalid email or password'}, status=400)             
+    return JsonResponse({'message': 'Invalid email or password'}, status=400) 
+            
 
 @csrf_exempt
 def register(request):
@@ -73,3 +78,24 @@ def register(request):
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=405)
 
+@login_required
+def user(request):
+    if request.method == 'GET':
+        # Assuming you want to return the username of the logged-in user
+        user = request.user
+        return JsonResponse({'user': {'username': user.username, 'email': user.email}}, status=200)
+    else:
+        return JsonResponse({'message': 'Method Not Allowed'}, status=405)
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            return JsonResponse({'access_token': access_token}, status=200)
+        else:
+            return JsonResponse({'message': 'Invalid credentials'}, status=400)    

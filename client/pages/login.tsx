@@ -28,6 +28,7 @@ const Login = () => {
       });
       if (res.status === 200) {
         router.push('/user');
+        localStorage.setItem('user', JSON.stringify(res)); // Save user information in local storage
       } else {
         setLoginError('Invalid email or password'); // Set error message
       }

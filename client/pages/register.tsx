@@ -53,7 +53,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="register-page">
+    <section className="register-page">
       <div className="register flex justify-center items-center">
         <div className="left">
           <Image
@@ -117,7 +117,7 @@ const RegisterPage = () => {
           </span>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,0 +1,23 @@
+.dashboard {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  padding: 3em;
+  .left {
+    height: 100%;
+    width: 20%;
+    color: white;
+    .top-sidebar {
+      height: 35%;
+    }
+    .btm-sidebar {
+      height: 65%;
+    }
+  }
+  .right {
+    height: 100%;
+    width: 80%;
+    background-color: white;
+    border-radius: 1.5em;
+  }
+}
