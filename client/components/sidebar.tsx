@@ -1,8 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
-
-interface SidebarProps {
-  setSelectedLink: Dispatch<SetStateAction<string>>;
-}
+import React from 'react';
+import { SidebarProps } from '@/interfaces/interface';
 
 const Sidebar: React.FC<SidebarProps> = ({ setSelectedLink }) => {
   const handleLinkClick = (link: string) => {
@@ -10,11 +7,11 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedLink }) => {
   };
 
   return (
-    <aside>
-      <p onClick={() => handleLinkClick('overview')}>Overview</p>
-      <p onClick={() => handleLinkClick('urlblocker')}>Urlblocker</p>
-      <p onClick={() => handleLinkClick('setting')}>Setting</p>
-    </aside>
+    <div className="sidebar">
+      <h4 onClick={() => handleLinkClick('overview')}>Overview</h4>
+      <h4 onClick={() => handleLinkClick('urlblocker')}>Urlblocker</h4>
+      <h4 onClick={() => handleLinkClick('setting')}>Setting</h4>
+    </div>
   );
 };
 
