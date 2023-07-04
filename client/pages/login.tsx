@@ -2,47 +2,44 @@
 import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-// import { login } from '../public/images';
+import { loginImage } from '../public/images';
 import Link from 'next/link';
 import '@/styles/login.scss';
-import { AuthenticationProvider } from '@/context/authentication';
-
-interface ContextProps {
-  login: (email: string, password: string) => void;
-}
+import { AuthenticationContext } from '@/context/authentication';
 
 const Login = () => {
   const [email, setEmail] = useState('');
+  const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
 
-  const { login } = useContext(AuthenticationProvider);
+  const { login } = useContext(AuthenticationContext);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    console.log('Login');
-    try {
-      const res = await fetch('api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      });
-      if (res.status === 200) {
-        router.push('/user');
-        localStorage.setItem('user', JSON.stringify(res)); // Save user information in local storage
-      } else {
-        setLoginError('Invalid email or password'); // Set error message
-      }
-    } catch (err) {
-      console.log('Error: ', err);
-      setLoginError('Error occurred'); // Set error message
-    }
+    login(username, password);
+    // try {
+    //   const res = await fetch('api/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       email,
+    //       password
+    //     })
+    //   });
+    //   if (res.status === 200) {
+    //     router.push('/user');
+    //     localStorage.setItem('user', JSON.stringify(res)); // Save user information in local storage
+    //   } else {
+    //     setLoginError('Invalid email or password'); // Set error message
+    //   }
+    // } catch (err) {
+    //   console.log('Error: ', err);
+    //   setLoginError('Error occurred'); // Set error message
+    // }
   };
 
   return (
@@ -50,10 +47,10 @@ const Login = () => {
       <div className="login flex justify-center items-center">
         <div className="left">
           <Image
-            src={'login'}
+            src={loginImage}
             width={450}
             height={450}
-            alt="login page image"
+            alt="Picture of the author"
           />
         </div>
         <form
@@ -64,12 +61,12 @@ const Login = () => {
           <h3 className="mb-8">Sign In To Your Account</h3>
           <div className="form">
             <div className="flex flex-col">
-              <label className="mb-1">Email:</label>
+              <label className="mb-1">Username:</label>
               <input
                 type="text"
                 className="text-black"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
                 placeholder="Enter Your Email"
               />
             </div>

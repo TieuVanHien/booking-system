@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { login } from '../public/images';
+import { loginImage } from '../public/images';
 import Link from 'next/link';
 import '../styles/register.scss';
+import loginHandler from './api/login';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -57,7 +58,7 @@ const RegisterPage = () => {
       <div className="register flex justify-center items-center">
         <div className="left">
           <Image
-            src={login}
+            src={loginImage}
             width={450}
             height={450}
             alt="Picture of the author"
