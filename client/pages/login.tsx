@@ -1,16 +1,23 @@
 'use client';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { login } from '../public/images';
+// import { login } from '../public/images';
 import Link from 'next/link';
-import '../styles/login.scss';
+import '@/styles/login.scss';
+import { AuthenticationProvider } from '@/context/authentication';
+
+interface ContextProps {
+  login: (email: string, password: string) => void;
+}
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const [loginError, setLoginError] = useState('');
+
+  const { login } = useContext(AuthenticationProvider);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -42,7 +49,12 @@ const Login = () => {
     <section className="login-page">
       <div className="login flex justify-center items-center">
         <div className="left">
-          <Image src={login} width={450} height={450} alt="login page image" />
+          <Image
+            src={'login'}
+            width={450}
+            height={450}
+            alt="login page image"
+          />
         </div>
         <form
           method="POST"
