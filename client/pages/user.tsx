@@ -41,16 +41,12 @@ const User = () => {
     fetchUser();
   }, []);
 
-  if (!user) {
-    // Handle case when user information is not available
-    return <div>Loading user information...</div>;
-  }
   return (
     <section className="dashboard flex justify-center items-center">
       <div className="left flex flex-col justify-center items-center">
         <div className="top-sidebar">
           <Image src="" alt="test" />
-          <h3> {user.username}</h3>
+          <h3>username</h3>
           <p>Email</p>
         </div>
         <div className="btm-sidebar">

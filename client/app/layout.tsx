@@ -1,4 +1,5 @@
 import '../styles/globals.scss';
+import { AuthenticationProvider } from '@/context/authentication';
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <AuthenticationProvider>
+        <body>{children}</body>
+      </AuthenticationProvider>
     </html>
   );
 }
