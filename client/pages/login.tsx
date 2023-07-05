@@ -8,7 +8,6 @@ import '@/styles/login.scss';
 import { AuthenticationContext } from '@/context/authentication';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -19,27 +18,6 @@ const Login = () => {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     login(username, password);
-    // try {
-    //   const res = await fetch('api/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       email,
-    //       password
-    //     })
-    //   });
-    //   if (res.status === 200) {
-    //     router.push('/user');
-    //     localStorage.setItem('user', JSON.stringify(res)); // Save user information in local storage
-    //   } else {
-    //     setLoginError('Invalid email or password'); // Set error message
-    //   }
-    // } catch (err) {
-    //   console.log('Error: ', err);
-    //   setLoginError('Error occurred'); // Set error message
-    // }
   };
 
   return (
@@ -67,7 +45,7 @@ const Login = () => {
                 className="text-black"
                 value={username}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="Enter Your Email"
+                placeholder="Enter Your Username"
               />
             </div>
             <div className="flex flex-col">

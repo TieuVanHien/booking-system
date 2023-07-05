@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Setting = () => {
-  return <div>Setting</div>;
+const Blocker = () => {
+  return <div>Blocker</div>;
 };
 
-export default Setting;
+export default Blocker;

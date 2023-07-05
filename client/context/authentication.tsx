@@ -1,5 +1,6 @@
 import React, { ReactNode, createContext, useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 interface AuthContextType {
   user: string;
@@ -26,11 +27,23 @@ export const AuthenticationProvider = ({ children }: Props) => {
 
   const router = useRouter();
 
-  const login = async (email: string, password: string) => {
-    console.log({ email, password });
-    console.log('login context');
+  const login = async (username: string, password: string) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    };
+    const body = {
+      username,
+      password
+    };
+    const { data } = await axios.post(
+      'http://localhost:3000/api/login',
+      body,
+      config
+    );
   };
-
   const authContextValue: AuthContextType = {
     user,
     accessToken,
