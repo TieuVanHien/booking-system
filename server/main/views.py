@@ -1,20 +1,32 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User, Group 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import viewsets
+from rest_framework import permissions
+from main.serializers import UserSerializer, GroupSerializer, SocialLinkSerializer
+from main.models import SocialLink
 from django.http import JsonResponse
 import json
 
-import json
+# User = get_user_model()
 
-User = get_user_model()
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('username')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-def hello(request):
-    return HttpResponse('Hello, world')
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class SocialLinkViewSet(viewsets.ModelViewSet):
+    queryset = SocialLink.objects.all()
+    serializer_class = SocialLinkSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 @csrf_exempt
 def login(request):
@@ -78,24 +90,12 @@ def register(request):
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=405)
 
+@csrf_exempt
 @login_required
 def user(request):
     if request.method == 'GET':
-        # Assuming you want to return the username of the logged-in user
         user = request.user
         return JsonResponse({'user': {'username': user.username, 'email': user.email}}, status=200)
     else:
         return JsonResponse({'message': 'Method Not Allowed'}, status=405)
     
-class CustomTokenObtainPairView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            return JsonResponse({'access_token': access_token}, status=200)
-        else:
-            return JsonResponse({'message': 'Invalid credentials'}, status=400)    

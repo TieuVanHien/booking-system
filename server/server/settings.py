@@ -53,14 +53,24 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django.middleware.common.CommonMiddleware",
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASSES': (
+        'rest_framework.pagination.PageNumberPagination',
+    ),
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -83,11 +93,11 @@ CORS_ALLOW_CREDENTIALS: True
 ROOT_URLCONF = 'server.urls'
 
 AUTHENTICATION_BACKENDS = [
-    'main.auth.CustomBackend',
+    # 'main.auth.CustomBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-AUTH_USER_MODEL = 'main.CustomUser'
+# AUTH_USER_MODEL = 'main.CustomUser'
 
 TEMPLATES = [
     {
