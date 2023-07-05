@@ -1,56 +1,35 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { loginImage } from '../public/images';
 import Link from 'next/link';
 import '../styles/register.scss';
-import loginHandler from './api/login';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
   const [emailError, setEmailError] = useState('');
+
+  const { register } = useContext(AuthenticationContext);
 
   const validateEmail = (email: any) => {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
   };
   const handleSubmit = async (e: any) => {
+    validateEmail(e);
     e.preventDefault();
-    if (!validateEmail(email)) {
-      setEmailError('Invalid email address');
-      return;
+    if (password !== password2) {
+      setError('Your password does not match');
     }
-    if (emailError) {
-      setEmailError('');
-    }
-    try {
-      const response = await axios.post('/api/register', {
-        username,
-        email,
-        password
-      });
-
-      if (response.status === 200 || response.status === 201) {
-        console.log(response.data);
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        router.push('/login');
-      } else {
-        // Registration failed
-        console.error('Registration failed');
-        setError('An error occurred');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-      setError('An error occurred');
-    }
+    register(username, email, password);
   };
 
   return (
@@ -99,6 +78,16 @@ const RegisterPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your Password"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1">Confirm Password:</label>
+              <input
+                type="password"
+                className="text-black"
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
+                placeholder="Confirm Password"
               />
             </div>
           </div>

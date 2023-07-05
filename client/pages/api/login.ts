@@ -20,13 +20,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         username,
         password
       };
-      const { data: accessResponse } = await axios.post(
-        'http://127.0.0.1:8000/api/token/',
-        body,
-        config
-      );
-      accessToken = accessResponse.access;
-      console.log(accessToken);
+      try {
+        const { data: accessResponse } = await axios.post(
+          'http://127.0.0.1:8000/api/token/',
+          body,
+          config
+        );
+        accessToken = accessResponse.access;
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('refresh', accessResponse.refresh, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 24,
+            path: '/',
+            sameSite: 'strict'
+          })
+        );
+        console.log(accessToken);
+      } catch (error) {
+        console.log('Error occured', error);
+      }
       if (accessToken) {
         const userConfig = {
           headers: {

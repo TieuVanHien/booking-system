@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets
 from rest_framework import permissions
-from main.serializers import UserSerializer, GroupSerializer, SocialLinkSerializer
+from main.serializers import UserSerializer, GroupSerializer, SocialLinkSerializer, RegisterUserSerializer
 from main.models import SocialLink
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -26,3 +26,6 @@ class UserAPIView(RetrieveAPIView):
     serializer_class = UserSerializer
     def get_object(self):
         return self.request.user
+class RegisterUserAPIView(CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = RegisterUserSerializer

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthenticationContext } from '@/context/authentication';
 import { Overview, Setting, Blocker, Sidebar } from '@/components/index';
 import Image from 'next/image';
 import '@/styles/dashboard.scss';
@@ -9,7 +10,7 @@ interface User {
 
 const User = () => {
   const [selectedLink, setSelectedLink] = useState('');
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useContext(AuthenticationContext);
 
   const renderContent = () => {
     switch (selectedLink) {
@@ -23,24 +24,6 @@ const User = () => {
         return null;
     }
   };
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/user');
-        const data = await response.json();
-        if (response.ok) {
-          setUser(data.user);
-        } else {
-          console.log(data.message);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
   return (
     <section className="dashboard flex justify-center items-center">
       <div className="left flex flex-col justify-center items-center">
@@ -52,6 +35,7 @@ const User = () => {
         <div className="btm-sidebar">
           <Sidebar setSelectedLink={setSelectedLink} />
         </div>
+        <a href="/">Sign Out</a>
       </div>
       <div className="right">
         <div>{renderContent()}</div>
