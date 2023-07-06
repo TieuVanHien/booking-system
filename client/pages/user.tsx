@@ -1,14 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthenticationContext } from '@/context/authentication';
-import axios from 'axios';
+import { User } from '@/interfaces/interface';
 import { Overview, Setting, Blocker, Sidebar } from '@/components/index';
 import Image from 'next/image';
-import '@/styles/dashboard.scss';
-
-interface User {
-  username: string;
-  email: string;
-}
 
 const User = () => {
   const [selectedLink, setSelectedLink] = useState('overview');

@@ -1,17 +1,7 @@
-import React, { ReactNode, createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-
-interface AuthContextType {
-  user: string;
-  accessToken: string;
-  error: string;
-  login: (email: string, password: string) => void;
-  register: (username: string, email: string, password: string) => void;
-}
-interface Props {
-  children?: ReactNode;
-}
+import { AuthContextType, Props } from '@/interfaces/interface';
 
 export const AuthenticationContext = createContext<AuthContextType>({
   user: '',

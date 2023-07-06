@@ -6,12 +6,21 @@ module.exports = {
   ) {
     return {
       '/': { page: '/home' },
-      '/register': { page: '/register', query: { title: 'registration page' } },
-      '/login': { page: '/login', query: { title: 'login page' } },
-      '/user': { page: '/user', query: { title: 'user page' } },
+      '/register': {
+        page: '/register',
+        query: { title: 'registration page', __nextDefaultLocale: 'en' }
+      },
+      '/login': {
+        page: '/login',
+        query: { title: 'login page', __nextDefaultLocale: 'en' }
+      },
+      '/user': {
+        page: '/user',
+        query: { title: 'user page', __nextDefaultLocale: 'en' }
+      },
       '/forgotpassword': {
         page: '/forgotpassword',
-        query: { title: 'forgotpassword page' }
+        query: { title: 'forgotpassword page', __nextDefaultLocale: 'en' }
       }
     };
   },

@@ -3,10 +3,8 @@ import React, { useState, useContext } from 'react';
 import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import { loginImage } from '../public/images';
 import Link from 'next/link';
-import '../styles/register.scss';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -14,14 +12,17 @@ const RegisterPage = () => {
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
   const [emailError, setEmailError] = useState('');
 
   const { register } = useContext(AuthenticationContext);
 
   const validateEmail = (email: any) => {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
+    try {
+      pattern.test(email);
+    } catch (err) {
+      setEmailError('Please enter a valid email');
+    }
   };
   const handleSubmit = async (e: any) => {
     validateEmail(e);
@@ -45,7 +46,6 @@ const RegisterPage = () => {
       register(username, email, password);
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
-        console.error('User with username or email already exists');
         setError('User with username or email already exists');
       } else {
         setError('Something went wrong, please try again!');

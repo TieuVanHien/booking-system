@@ -31,6 +31,7 @@ class UserAPIView(RetrieveAPIView):
 class RegisterUserAPIView(CreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterUserSerializer
+    
     def perform_create(self, serializer):
         username = serializer.validated_data.get('username')
         email = serializer.validated_data.get('email')
@@ -39,13 +40,11 @@ class RegisterUserAPIView(CreateAPIView):
             raise serializers.ValidationError('Username is already registered.')
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError('Email is already registered.')
-
         serializer.save()
-
+        
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
         try:
             self.perform_create(serializer)
         except serializers.ValidationError as e:
