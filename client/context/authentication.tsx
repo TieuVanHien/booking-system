@@ -49,6 +49,7 @@ export const AuthenticationProvider = ({ children }: Props) => {
       }
       if (accessResponse && accessResponse.access) {
         setAccessToken(accessResponse.access);
+        localStorage.setItem('accessToken', accessResponse.access);
       }
       router.push('/user');
     } catch (err: any) {

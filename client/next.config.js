@@ -8,6 +8,7 @@ module.exports = {
       '/': { page: '/home' },
       '/register': { page: '/register', query: { title: 'registration page' } },
       '/login': { page: '/login', query: { title: 'login page' } },
+      '/user': { page: '/user', query: { title: 'user page' } },
       '/forgotpassword': {
         page: '/forgotpassword',
         query: { title: 'forgotpassword page' }
