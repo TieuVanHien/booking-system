@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from main.models import SocialLink
-
+from main.models import SocialLink, SocialMediaUsage
+from django.utils import timezone
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -28,3 +28,20 @@ class SocialLinkSerializer(serializers.HyperlinkedModelSerializer):
         model = SocialLink
         fields = ['name', 'social_link']
 
+class SocialMediaUsageSerializer(serializers.HyperlinkedModelSerializer):
+    duration = serializers.SerializerMethodField()
+
+    def get_duration(self, instance):
+        start_time = instance.start_time
+        end_time = instance.end_time
+        if start_time and end_time:
+            duration = (end_time - start_time).total_seconds()
+            return duration
+        return 0
+
+    def create(self, validated_data):
+        start_time = timezone.now()
+        return super().create({**validated_data, 'start_time': start_time})
+    class Meta:
+        model = SocialMediaUsage
+        fields = ['url', 'start_time', 'end_time', 'duration']

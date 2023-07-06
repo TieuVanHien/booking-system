@@ -4,9 +4,9 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
-router.register(r'social-link', views.SocialLinkViewSet)
+router.register(r'users', views.UserViewSet, basename='user')
+router.register(r'groups', views.GroupViewSet, basename='group')
+router.register(r'social-link', views.SocialLinkViewSet, basename='social-link')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -14,5 +14,7 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/user/', views.UserAPIView.as_view(), name='login'),
-    path('api/register/', views.RegisterUserAPIView.as_view(), name='register')
+    path('api/register/', views.RegisterUserAPIView.as_view(), name='register'),
+    path('api/url-tracker/', views.SocialMediaTrackerAPIView.as_view(), name='tracker')
+    # path('api/update-tracker/', views.update_social_media_usage, name='update_social_media_usage'),
 ]
