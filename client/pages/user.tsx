@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthenticationContext } from '@/context/authentication';
 import { UserProps } from '@/interfaces/interface';
 import { Overview, Setting, Blocker, Sidebar } from '@/components/index';
 import Image from 'next/image';
@@ -13,7 +12,6 @@ const User = () => {
       try {
         const response = await fetch('/api/user', {});
         const data = await response.json();
-        console.log(data);
         setUserData(data.user);
       } catch (error) {
         console.error(error);
