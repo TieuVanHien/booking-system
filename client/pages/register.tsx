@@ -29,7 +29,28 @@ const RegisterPage = () => {
     if (password !== password2) {
       setError('Your password does not match');
     }
-    register(username, email, password);
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        }
+      };
+      const body = {
+        username,
+        email,
+        password
+      };
+      await axios.post('http://127.0.0.1:8000/api/register/', body, config);
+      register(username, email, password);
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        console.error('User with username or email already exists');
+        setError('User with username or email already exists');
+      } else {
+        setError('Something went wrong, please try again!');
+      }
+    }
   };
 
   return (
@@ -98,7 +119,7 @@ const RegisterPage = () => {
             Create Account
           </button>
           {error && <p className="mt-2">{error}</p>}
-          {emailError && <p className="mt-2">{emailError}</p>}
+          {emailError && <p className="mt-4">{emailError}</p>}
           <span className="mt-4 text-xs">
             Already have an account?
             <Link href="/login" className="ml-1 text-yellow-500">
