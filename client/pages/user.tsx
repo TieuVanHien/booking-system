@@ -1,23 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthenticationContext } from '@/context/authentication';
-import { User } from '@/interfaces/interface';
+import { UserProps } from '@/interfaces/interface';
 import { Overview, Setting, Blocker, Sidebar } from '@/components/index';
 import Image from 'next/image';
 
 const User = () => {
   const [selectedLink, setSelectedLink] = useState('overview');
-  const [userData, setUserData] = useState<User | null>(null);
-  const authContext = useContext(AuthenticationContext);
-  const { accessToken } = authContext;
+  const [user, setUserData] = useState<UserProps | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('/api/user', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        });
+        const response = await fetch('/api/user', {});
         const data = await response.json();
         console.log(data);
         setUserData(data.user);
@@ -25,10 +19,8 @@ const User = () => {
         console.error(error);
       }
     };
-    if (accessToken) {
-      fetchUserData();
-    }
-  }, [accessToken]);
+    fetchUserData();
+  }, []);
 
   const renderContent = () => {
     switch (selectedLink) {
@@ -47,8 +39,8 @@ const User = () => {
       <div className="left flex flex-col justify-center items-center">
         <div className="top-sidebar">
           <Image src="" alt="test" />
-          <h3>@{userData?.username}</h3>
-          <p>{userData?.email}</p>
+          <h3>@{user?.username}</h3>
+          <p>{user?.email}</p>
         </div>
         <div className="btm-sidebar">
           <Sidebar setSelectedLink={setSelectedLink} />

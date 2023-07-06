@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { AuthContextType, Props } from '@/interfaces/interface';
@@ -8,7 +8,8 @@ export const AuthenticationContext = createContext<AuthContextType>({
   accessToken: '',
   error: '',
   login: () => {},
-  register: () => {}
+  register: () => {},
+  checkUserLogin: () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState('');
@@ -16,6 +17,9 @@ export const AuthenticationProvider = ({ children }: Props) => {
   const [error, setError] = useState('');
 
   const router = useRouter();
+  useEffect(() => {
+    checkUserLogin();
+  }, []);
   //create next.js api for login
   const login = async (username: string, password: string) => {
     const config = {
@@ -70,14 +74,25 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
+  // keep user logged in
+  const checkUserLogin = async (): Promise<void> => {
+    try {
+      const { data } = await axios.post('http://localhost:3000/api/user');
+      setUser(data.user);
+      setAccessToken(data.access);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const authContextValue: AuthContextType = {
     user,
     accessToken,
     error,
     login,
-    register
+    register,
+    checkUserLogin
   };
-
   return (
     <AuthenticationContext.Provider value={authContextValue}>
       {children}

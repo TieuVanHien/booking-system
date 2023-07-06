@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, ReactNode } from 'react';
 export interface SidebarProps {
   setSelectedLink: Dispatch<SetStateAction<string>>;
 }
-export interface User {
+export interface UserProps {
   username: string;
   email: string;
 }
@@ -14,6 +14,7 @@ export interface AuthContextType {
   error: string;
   login: (email: string, password: string) => void;
   register: (username: string, email: string, password: string) => void;
+  checkUserLogin: () => void;
 }
 export interface Props {
   children?: ReactNode;
