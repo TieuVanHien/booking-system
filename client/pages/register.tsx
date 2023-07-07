@@ -31,18 +31,6 @@ const RegisterPage = () => {
       setError('Your password does not match');
     }
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        }
-      };
-      const body = {
-        username,
-        email,
-        password
-      };
-      await axios.post('http://127.0.0.1:8000/api/register/', body, config);
       register(username, email, password);
     } catch (error: any) {
       if (error.response && error.response.status === 400) {

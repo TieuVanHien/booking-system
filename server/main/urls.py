@@ -6,7 +6,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet, basename='user')
 router.register(r'groups', views.GroupViewSet, basename='group')
-router.register(r'social-link', views.SocialLinkViewSet, basename='social-link')
+router.register(r'admin', views.AdminUserViewSet, basename='admin-user')
 
 urlpatterns = [
     path('', include(router.urls)),

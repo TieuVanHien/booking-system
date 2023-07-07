@@ -3,10 +3,10 @@ from rest_framework.generics import RetrieveAPIView, CreateAPIView
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.response import Response
-from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer
+from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('username')
+    queryset = User.objects.all().order_by('is_staff')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -43,3 +43,14 @@ class RegisterUserAPIView(CreateAPIView):
             return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': 'Registration successful'}, status=status.HTTP_201_CREATED)
+
+class AdminUserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().filter(is_superuser=True)
+    serializer_class = AdminUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(is_staff=True)
+
+    def perform_create(self, serializer):
+        serializer.save(is_staff=True, is_superuser=True)

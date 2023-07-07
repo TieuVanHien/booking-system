@@ -1,9 +1,13 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    is_staff = serializers.BooleanField()
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'password', 'groups']
+        fields = ['url', 'username', 'email', 'is_staff', 'groups']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
         
 class RegisterUserSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
@@ -20,3 +24,13 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
+
+class AdminUserSerializer(serializers.HyperlinkedModelSerializer):
+    is_staff = serializers.BooleanField(default=True)
+
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'password', 'groups', 'is_staff']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
