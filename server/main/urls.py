@@ -15,6 +15,4 @@ urlpatterns = [
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/user/', views.UserAPIView.as_view(), name='login'),
     path('api/register/', views.RegisterUserAPIView.as_view(), name='register'),
-    path('api/url-tracker/', views.SocialMediaTrackerAPIView.as_view(), name='tracker')
-    # path('api/update-tracker/', views.update_social_media_usage, name='update_social_media_usage'),
 ]
