@@ -38,6 +38,8 @@ export const AuthenticationProvider = ({ children }: Props) => {
         body,
         config
       );
+      console.log(accessResponse);
+      console.log(accessResponse.user.is_staff);
       if (accessResponse && accessResponse.user) {
         setUser(accessResponse.user);
       }
@@ -45,7 +47,11 @@ export const AuthenticationProvider = ({ children }: Props) => {
         setAccessToken(accessResponse.access);
         localStorage.setItem('accessToken', accessResponse.access);
       }
-      router.push('/user');
+      if (accessResponse.user.is_staff === true) {
+        router.push('/admin');
+      } else {
+        router.push('/user');
+      }
     } catch (err: any) {
       console.log(err);
     }

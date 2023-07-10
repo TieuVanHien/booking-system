@@ -52,7 +52,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             'http://127.0.0.1:8000/api/user/',
             userConfig
           );
-          console.log(userData);
           res.status(200).json({ user: userData, access: accessToken });
         } catch (err) {
           console.error('User data retrieval error:', err);
