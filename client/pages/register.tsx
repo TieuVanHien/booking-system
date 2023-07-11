@@ -2,7 +2,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
-import axios from 'axios';
 import { loginImage } from '../public/images';
 import Link from 'next/link';
 
