@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserProps } from '@/interfaces/interface';
 import { Overview, Setting, Blocker, Sidebar } from '@/components/index';
+import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
 
 const User = () => {
   const [selectedLink, setSelectedLink] = useState('overview');
   const [user, setUserData] = useState<UserProps | null>(null);
+
+  const { logout } = useContext(AuthenticationContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -19,6 +22,11 @@ const User = () => {
     };
     fetchUserData();
   }, []);
+
+  const handleLogout = async (e: any) => {
+    e.preventDefault();
+    await logout();
+  };
 
   const renderContent = () => {
     switch (selectedLink) {
@@ -43,7 +51,9 @@ const User = () => {
         <div className="btm-sidebar">
           <Sidebar setSelectedLink={setSelectedLink} />
         </div>
-        <a href="/">Sign Out</a>
+        <a href="/home" onClick={handleLogout}>
+          Sign Out
+        </a>
       </div>
       <div className="right">
         <div>{renderContent()}</div>

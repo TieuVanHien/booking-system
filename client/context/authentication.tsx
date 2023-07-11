@@ -9,11 +9,12 @@ export const AuthenticationContext = createContext<AuthContextType>({
   error: '',
   login: () => {},
   register: () => {},
-  checkUserLogin: () => {}
+  checkUserLogin: () => {},
+  logout: () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
-  const [user, setUser] = useState('');
-  const [accessToken, setAccessToken] = useState('');
+  const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [error, setError] = useState('');
 
   const router = useRouter();
@@ -90,14 +91,25 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
-
+  // logout user
+  const logout = async (): Promise<void> => {
+    try {
+      await axios.post('http://localhost:3000/api/logout');
+      setUser(null);
+      setAccessToken(null);
+      router.push('/home');
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
   const authContextValue: AuthContextType = {
     user,
     accessToken,
     error,
     login,
     register,
-    checkUserLogin
+    checkUserLogin,
+    logout
   };
   return (
     <AuthenticationContext.Provider value={authContextValue}>

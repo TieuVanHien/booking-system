@@ -9,12 +9,13 @@ export interface UserProps {
 }
 
 export interface AuthContextType {
-  user: string;
-  accessToken: string;
+  user: null | string;
+  accessToken: null | string;
   error: string;
   login: (email: string, password: string) => void;
   register: (username: string, email: string, password: string) => void;
   checkUserLogin: () => void;
+  logout: () => void;
 }
 export interface Props {
   children?: ReactNode;
