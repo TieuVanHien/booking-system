@@ -1,6 +1,7 @@
 @use './dashboard.scss';
 @use './login.scss';
 @use './register.scss';
+@use './booking.scss';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -15,6 +16,7 @@ body {
   height: 100%;
   width: 100%;
   padding: 0;
+  overflow: hidden;
   font-family: 'Poppins', sans-serif;
   label {
     font-family: Poppins;

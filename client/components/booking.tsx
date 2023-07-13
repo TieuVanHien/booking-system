@@ -110,21 +110,10 @@ const Booking = () => {
   }, [allEvents]);
 
   return (
-    <section className="booking">
-      <h1>Calendar</h1>
-      <Calendar
-        localizer={localizer}
-        events={allEvents}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500, margin: '50px' }}
-        components={{
-          event: EventComponent
-        }}
-      />
-      <div className="book-form">
+    <section className="booking flex flex-col justify-center items-center">
+      <div className="book-form flex flex-col justify-center">
         <h3>Add New Booking</h3>
-        <div>
+        <div className="input-form flex flex-col justify-center">
           <input
             type="text"
             placeholder="Add Title"
@@ -139,6 +128,7 @@ const Booking = () => {
             timeIntervals={15}
             dateFormat="MMMM d, yyyy HH:mm"
             timeCaption="Time"
+            minDate={new Date()}
             onChange={(start) => setEvent({ ...event, start })}
           />
           <select
@@ -159,6 +149,18 @@ const Booking = () => {
             Submit
           </button>
         </div>
+      </div>
+      <div className="calendar">
+        <Calendar
+          localizer={localizer}
+          events={allEvents}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500, width: 1200, margin: '2em' }}
+          components={{
+            event: EventComponent
+          }}
+        />
       </div>
     </section>
   );
