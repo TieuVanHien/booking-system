@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import DatePicker from 'react-datepicker';
+import { OverviewProps, Service, NewEvent } from '@/interfaces/interface';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
@@ -14,81 +15,132 @@ const localizer = dateFnsLocalizer({
   locales
 });
 
-const events = [
+const services: Service[] = [
   {
-    title: 'Book for hands',
-    start: new Date(2023, 7, 10),
-    end: new Date(2023, 7, 12)
+    id: 1,
+    name: 'Hand Service',
+    duration: 60,
+    serviceId: null,
+    startHour: 60
   },
   {
-    title: 'Book for feet',
-    start: new Date(2023, 7, 10),
-    end: new Date(2023, 7, 12)
+    id: 2,
+    name: 'Feet Service',
+    duration: 30,
+    serviceId: null,
+    startHour: 60
   },
   {
-    title: 'Book for massage',
-    start: new Date(2023, 7, 10),
-    end: new Date(2023, 7, 12)
+    id: 3,
+    name: 'Other Service',
+    duration: 45,
+    serviceId: null,
+    startHour: 60
   }
 ];
 
-interface OverviewProps {
-  start: Date | null;
-  end: Date | null;
-}
+const events: NewEvent[] = [
+  {
+    title: `${services[0].name} - Book 1`,
+    start: new Date(2023, 7, 10),
+    end: services[0].duration,
+    startHour: 60
+  },
+  {
+    title: `${services[1].name} - Book 2`,
+    start: new Date(2023, 7, 11),
+    end: services[1].duration,
+    startHour: 60
+  },
+  {
+    title: `${services[2].name} - Book 3`,
+    start: new Date(2023, 7, 12),
+    end: services[2].duration,
+    startHour: 60
+  }
+];
+
+const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
+  <div>
+    <strong>{event.title}</strong>
+    <br />
+    {format(event.start, 'MMMM d, yyyy hh:mm a')} - {format(event.end, 'h a')}
+  </div>
+);
 
 const Overview: React.FC<OverviewProps> = () => {
-  const [event, setEvent] = useState({
+  const [event, setEvent] = useState<NewEvent>({
     title: '',
-    start: null as Date | null,
-    end: null as Date | null
+    start: null,
+    end: null,
+    startHour: null
   });
-  const [allEvents, setAllEvents] = useState(events);
+  const [allEvents, setAllEvents] = useState<NewEvent[]>(events);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+
+  const handleServiceChange = (serviceId: number) => {
+    const service = services.find((s) => s.id === serviceId);
+    setSelectedService(service || null);
+  };
 
   const handleAddEvent = () => {
-    if (event.title && event.start && event.end) {
-      const newEvent = {
-        title: event.title,
+    if (event.title && event.start && selectedService) {
+      const newEvent: NewEvent = {
+        title: `${selectedService.name} - ${event.title}`,
         start: event.start,
-        end: event.end
+        end: selectedService.duration,
+        startHour: event.startHour
       };
       setAllEvents([...allEvents, newEvent]);
-      setEvent({ title: '', start: null, end: null });
+      setEvent({ title: '', start: null, end: null, startHour: 0 });
     }
   };
 
   return (
     <div className="myCustomHeight">
       <h1>Calendar</h1>
-      <h3>Add New Booking</h3>
-      <div>
-        <input
-          type="text"
-          placeholder="Add Title"
-          value={event.title}
-          onChange={(e) => setEvent({ ...event, title: e.target.value })}
-        />
-        <DatePicker
-          placeholderText="Start Date"
-          selected={event.start || null}
-          onChange={(start) => setEvent({ ...event, start })}
-        />
-        <DatePicker
-          placeholderText="End Date"
-          selected={event.end || null}
-          onChange={(end: Date | null) => setEvent({ ...event, end })}
-        />
-        <button type="submit" onClick={handleAddEvent}>
-          Submit
-        </button>
-      </div>
       <Calendar
         localizer={localizer}
         events={allEvents}
         startAccessor="start"
-        endAccessor="end"
         style={{ height: 500, margin: '50px' }}
+        components={{
+          event: EventComponent
+        }}
       />
+      <div className="book-form">
+        <h3>Add New Booking</h3>
+        <div>
+          <input
+            type="text"
+            placeholder="Add Title"
+            value={event.title}
+            onChange={(e) => setEvent({ ...event, title: e.target.value })}
+          />
+          <DatePicker
+            placeholderText="Start Date"
+            selected={event.start}
+            onChange={(start) => setEvent({ ...event, start })}
+          />
+          <select
+            value={selectedService?.id || 0}
+            onChange={(e) => handleServiceChange(Number(e.target.value))}
+          >
+            <option value={0}>Select a service</option>
+            {services.map((service) => (
+              <option key={service.id} value={service.id}>
+                {service.name}
+              </option>
+            ))}
+          </select>
+          {selectedService && (
+            <div>Service Duration: {selectedService.duration} minutes</div>
+          )}
+          <button type="submit" onClick={handleAddEvent}>
+            Submit
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
