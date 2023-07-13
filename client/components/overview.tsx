@@ -77,7 +77,7 @@ const Overview: React.FC<OverviewProps> = () => {
     end: null
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>(events);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>();
 
   const handleServiceChange = (serviceId: number) => {
     const service = services.find((s) => s.id === serviceId);
@@ -102,6 +102,7 @@ const Overview: React.FC<OverviewProps> = () => {
       setAllEvents([...allEvents, newEvent]);
       console.log(allEvents);
       setEvent({ title: '', start: null, end: null });
+      setSelectedService(null);
     }
   };
   useEffect(() => {
@@ -133,6 +134,11 @@ const Overview: React.FC<OverviewProps> = () => {
           <DatePicker
             placeholderText="Start Date"
             selected={event.start}
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="MMMM d, yyyy HH:mm"
+            timeCaption="Time"
             onChange={(start) => setEvent({ ...event, start })}
           />
           <select
