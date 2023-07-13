@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import DatePicker from 'react-datepicker';
@@ -20,43 +20,40 @@ const services: Service[] = [
     id: 1,
     name: 'Hand Service',
     duration: 60,
-    serviceId: null,
-    startHour: 60
+    serviceId: null
   },
   {
     id: 2,
     name: 'Feet Service',
     duration: 30,
-    serviceId: null,
-    startHour: 60
+    serviceId: null
   },
   {
     id: 3,
     name: 'Other Service',
     duration: 45,
-    serviceId: null,
-    startHour: 60
+    serviceId: null
   }
 ];
 
-const events: NewEvent[] = [
+const events = [
   {
     title: `${services[0].name} - Book 1`,
-    start: new Date(2023, 7, 10),
-    end: services[0].duration,
-    startHour: 60
+    start: new Date(2023, 7, 10, 12),
+    duration: 60,
+    end: new Date(2023, 7, 10, 1)
   },
   {
     title: `${services[1].name} - Book 2`,
-    start: new Date(2023, 7, 11),
-    end: services[1].duration,
-    startHour: 60
+    start: new Date(2023, 7, 11, 1),
+    duration: 60,
+    end: new Date(2023, 7, 11, 2)
   },
   {
     title: `${services[2].name} - Book 3`,
-    start: new Date(2023, 7, 12),
-    end: services[2].duration,
-    startHour: 60
+    start: new Date(2023, 7, 12, 3),
+    duration: 60,
+    end: new Date(2023, 7, 12, 4)
   }
 ];
 
@@ -64,7 +61,7 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
   <div>
     <strong>{event.title}</strong>
     <br />
-    {format(event.start, 'MMMM d, yyyy hh:mm a')} - {format(event.end, 'h a')}
+    {event.start && <>{format(event.start, 'MMMM d, yyyy hh:mm a')} - </>}
   </div>
 );
 
@@ -72,8 +69,7 @@ const Overview: React.FC<OverviewProps> = () => {
   const [event, setEvent] = useState<NewEvent>({
     title: '',
     start: null,
-    end: null,
-    startHour: null
+    end: null
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>(events);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -88,13 +84,17 @@ const Overview: React.FC<OverviewProps> = () => {
       const newEvent: NewEvent = {
         title: `${selectedService.name} - ${event.title}`,
         start: event.start,
-        end: selectedService.duration,
-        startHour: event.startHour
+        end: event.end
       };
+      console.log(newEvent);
       setAllEvents([...allEvents, newEvent]);
-      setEvent({ title: '', start: null, end: null, startHour: 0 });
+      console.log(allEvents);
+      setEvent({ title: '', start: null, end: null });
     }
   };
+  useEffect(() => {
+    console.log(allEvents);
+  }, [allEvents]);
 
   return (
     <div className="myCustomHeight">
@@ -103,6 +103,7 @@ const Overview: React.FC<OverviewProps> = () => {
         localizer={localizer}
         events={allEvents}
         startAccessor="start"
+        endAccessor="end"
         style={{ height: 500, margin: '50px' }}
         components={{
           event: EventComponent

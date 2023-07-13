@@ -37,7 +37,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             sameSite: 'strict'
           })
         );
-        console.log(accessToken);
       } catch (error) {
         console.log('Error occured', error);
       }

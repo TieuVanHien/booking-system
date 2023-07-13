@@ -24,7 +24,6 @@ export interface Props {
 export interface OverviewProps {
   start: Date | null;
   serviceId: number | null;
-  end: number | null;
   startHour: number | null;
 }
 
@@ -33,12 +32,10 @@ export interface Service {
   name: string | null;
   duration: number | null;
   serviceId: number | null;
-  startHour: number | null;
 }
 
 export interface NewEvent {
   title: string;
-  start: any | null;
-  end: any | null;
-  startHour: number | null;
+  start: Date | null;
+  end: Date | null;
 }
