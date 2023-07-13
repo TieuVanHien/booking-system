@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import DatePicker from 'react-datepicker';
-import { OverviewProps, Service, NewEvent } from '@/interfaces/interface';
+import { Service, NewEvent } from '@/interfaces/interface';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
@@ -70,7 +70,7 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
   </div>
 );
 
-const Overview: React.FC<OverviewProps> = () => {
+const Booking = () => {
   const [event, setEvent] = useState<NewEvent>({
     title: '',
     start: null,
@@ -110,7 +110,7 @@ const Overview: React.FC<OverviewProps> = () => {
   }, [allEvents]);
 
   return (
-    <div className="myCustomHeight">
+    <section className="booking">
       <h1>Calendar</h1>
       <Calendar
         localizer={localizer}
@@ -160,8 +160,8 @@ const Overview: React.FC<OverviewProps> = () => {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default Overview;
+export default Booking;

@@ -1,6 +1,6 @@
-import Overview from './overview';
+import Booking from './booking';
 import Blocker from './blocker';
 import Setting from './setting';
 import Sidebar from './sidebar';
 
-export { Overview, Blocker, Setting, Sidebar };
+export { Booking, Blocker, Setting, Sidebar };

@@ -21,12 +21,6 @@ export interface Props {
   children?: ReactNode;
 }
 
-export interface OverviewProps {
-  start: Date | null;
-  serviceId: number | null;
-  startHour: number | null;
-}
-
 export interface Service {
   id: number;
   name: string | null;
