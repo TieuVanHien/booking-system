@@ -4,6 +4,8 @@ import { format, parse, startOfWeek, getDay } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import { Service, NewEvent } from '@/interfaces/interface';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Typography } from '@mui/material';
+import { ModalComponent } from '@/components/index';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
 
@@ -78,6 +80,7 @@ const Booking = () => {
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>(events);
   const [selectedService, setSelectedService] = useState<Service | null>();
+  const [openModal, setOpenModal] = useState(false);
 
   const handleServiceChange = (serviceId: number) => {
     const service = services.find((s) => s.id === serviceId);
@@ -105,62 +108,79 @@ const Booking = () => {
       setSelectedService(null);
     }
   };
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
   useEffect(() => {
     console.log(allEvents);
   }, [allEvents]);
 
   return (
     <section className="booking flex flex-col justify-center items-center">
-      <div className="book-form flex flex-col justify-center">
-        <h3>Add New Booking</h3>
-        <div className="input-form flex flex-col justify-center">
-          <input
-            type="text"
-            placeholder="Add Title"
-            value={event.title}
-            onChange={(e) => setEvent({ ...event, title: e.target.value })}
-          />
-          <DatePicker
-            placeholderText="Start Date"
-            selected={event.start}
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            dateFormat="MMMM d, yyyy HH:mm"
-            timeCaption="Time"
-            minDate={new Date()}
-            onChange={(start) => setEvent({ ...event, start })}
-          />
-          <select
-            value={selectedService?.id || 0}
-            onChange={(e) => handleServiceChange(Number(e.target.value))}
-          >
-            <option value={0}>Select a service</option>
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.name}
-              </option>
-            ))}
-          </select>
-          {selectedService && (
-            <div>Service Duration: {selectedService.duration} minutes</div>
-          )}
-          <button type="submit" onClick={handleAddEvent}>
-            Submit
-          </button>
-        </div>
-      </div>
+      <h3>Calendar</h3>
       <div className="calendar">
         <Calendar
           localizer={localizer}
           events={allEvents}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 500, width: 1200, margin: '2em' }}
+          style={{ height: 500, width: 900, margin: '2em' }}
           components={{
             event: EventComponent
           }}
         />
+      </div>
+      <div className="book-form flex flex-col justify-center">
+        <button type="button" onClick={handleOpenModal}>
+          <h3>Add New Booking</h3>
+        </button>
+        <ModalComponent open={openModal} onClose={handleCloseModal}>
+          <Typography>
+            <div className="input-form flex flex-col justify-center">
+              <input
+                type="text"
+                placeholder="Add Title"
+                value={event.title}
+                onChange={(e) => setEvent({ ...event, title: e.target.value })}
+              />
+              <DatePicker
+                placeholderText="Start Date"
+                selected={event.start}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="MMMM d, yyyy HH:mm"
+                timeCaption="Time"
+                minDate={new Date()}
+                onChange={(start) => setEvent({ ...event, start })}
+              />
+              <select
+                value={selectedService?.id || 0}
+                onChange={(e) => handleServiceChange(Number(e.target.value))}
+              >
+                <option value={0}>Select a service</option>
+                {services.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.name}
+                  </option>
+                ))}
+              </select>
+              {selectedService && (
+                <div>Service Duration: {selectedService.duration} minutes</div>
+              )}
+              <button
+                className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18"
+                type="submit"
+                onClick={handleAddEvent}
+              >
+                Submit
+              </button>
+            </div>
+          </Typography>
+        </ModalComponent>
       </div>
     </section>
   );

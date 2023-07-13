@@ -1,0 +1,20 @@
+.MuiBox-root {
+  .input-form {
+    input[type='text'],
+    select {
+      margin-bottom: 1em;
+      padding: 0.5em;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    select {
+      height: 2.5em;
+    }
+    .service-duration {
+      margin-top: 0.5em;
+      font-size: 0.9em;
+      color: #888;
+    }
+  }
+}
