@@ -8,6 +8,11 @@ export interface UserProps {
   email: string;
 }
 
+export interface ModalComponentProps {
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
 export interface AuthContextType {
   user: null | string;
   accessToken: null | string;
