@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserProps } from '@/interfaces/interface';
-import { Booking, Setting, Blocker, Sidebar } from '@/components/index';
+import { Booking, Setting, BookingHistory, Sidebar } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
 
@@ -32,8 +32,8 @@ const User = () => {
     switch (selectedLink) {
       case 'overview':
         return <Booking />;
-      case 'urlblocker':
-        return <Blocker />;
+      case 'bookinghistory':
+        return <BookingHistory />;
       case 'setting':
         return <Setting />;
       default:

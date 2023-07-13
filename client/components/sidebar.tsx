@@ -6,10 +6,16 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedLink }) => {
     setSelectedLink(link);
   };
   return (
-    <div className="sidebar">
-      <h4 onClick={() => handleLinkClick('overview')}>Booking</h4>
-      <h4 onClick={() => handleLinkClick('urlblocker')}>Urlblocker</h4>
-      <h4 onClick={() => handleLinkClick('setting')}>Setting</h4>
+    <div className="sidebar flex flex-col justify-center items-start">
+      <h4 className="mt-2" onClick={() => handleLinkClick('overview')}>
+        Booking
+      </h4>
+      <h4 className="mt-2" onClick={() => handleLinkClick('bookinghistory')}>
+        History
+      </h4>
+      <h4 className="mt-2" onClick={() => handleLinkClick('setting')}>
+        Setting
+      </h4>
     </div>
   );
 };

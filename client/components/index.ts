@@ -1,7 +1,7 @@
 import Booking from './booking';
-import Blocker from './blocker';
+import BookingHistory from './bookingHistory';
 import Setting from './setting';
 import Sidebar from './sidebar';
 import ModalComponent from './modal';
 
-export { ModalComponent, Booking, Blocker, Setting, Sidebar };
+export { ModalComponent, Booking, BookingHistory, Setting, Sidebar };
