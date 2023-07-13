@@ -61,7 +61,12 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
   <div>
     <strong>{event.title}</strong>
     <br />
-    {event.start && <>{format(event.start, 'MMMM d, yyyy hh:mm a')} - </>}
+    {event.start && event.end && (
+      <>
+        {format(event.start, 'MMMM d, yyyy hh:mm a')} -{' '}
+        {format(event.end, 'MMMM d, yyyy hh:mm a')}
+      </>
+    )}
   </div>
 );
 
@@ -80,11 +85,18 @@ const Overview: React.FC<OverviewProps> = () => {
   };
 
   const handleAddEvent = () => {
-    if (event.title && event.start && selectedService) {
+    if (
+      event.title &&
+      event.start &&
+      selectedService &&
+      selectedService.duration !== null
+    ) {
+      const end = new Date(event.start);
+      end.setMinutes(event.start.getMinutes() + selectedService.duration);
       const newEvent: NewEvent = {
         title: `${selectedService.name} - ${event.title}`,
         start: event.start,
-        end: event.end
+        end: new Date(end)
       };
       console.log(newEvent);
       setAllEvents([...allEvents, newEvent]);
