@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from rest_framework.generics import RetrieveAPIView, CreateAPIView
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.response import Response
-from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer
+from .models import Booking
+from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer, BookingSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('is_staff')
@@ -54,3 +57,18 @@ class AdminUserViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(is_staff=True, is_superuser=True)
+        
+class UserBookingsView(CreateAPIView):
+    serializer_class = BookingSerializer
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        return Booking.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(user=user)
+       
