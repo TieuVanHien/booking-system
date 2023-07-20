@@ -22,6 +22,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         bookings = Booking.objects.filter(user=obj)
         booking_serializer = BookingSerializer(bookings, many=True)
         return booking_serializer.data
+    def create(self, validated_data):
+        bookings_data = self.context.get('request').data.get('bookings', [])  
+        user = User.objects.create(**validated_data) 
+        for booking_data in bookings_data:
+            booking_data['user'] = user.id 
+            booking_serializer = BookingSerializer(data=booking_data)
+            booking_serializer.is_valid(raise_exception=True)
+            booking_serializer.save()  
+        return user
 
     class Meta:
         model = User

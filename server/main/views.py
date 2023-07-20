@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from rest_framework.generics import RetrieveAPIView, CreateAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListAPIView
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from django.contrib.auth.models import User, Group 
@@ -58,10 +58,10 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(is_staff=True, is_superuser=True)
         
-class UserBookingsView(CreateAPIView):
+class UserBookingsView(RetrieveAPIView, CreateAPIView):
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
-    serializer_class = BookingSerializer
+
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         user = get_object_or_404(User, pk=user_id)

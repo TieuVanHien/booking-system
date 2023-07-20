@@ -87,7 +87,8 @@ const Booking = () => {
     setSelectedService(service || null);
   };
 
-  const handleAddEvent = () => {
+  const handleAddEvent = (e: any) => {
+    e.preventDefault();
     if (
       event.title &&
       event.start &&
@@ -101,11 +102,14 @@ const Booking = () => {
         start: event.start,
         end: new Date(end)
       };
-      console.log(newEvent);
       setAllEvents([...allEvents, newEvent]);
-      console.log(allEvents);
       setEvent({ title: '', start: null, end: null });
       setSelectedService(null);
+      try {
+        console.log(newEvent);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
   const handleOpenModal = () => {

@@ -1,7 +1,12 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { AuthContextType, Props } from '@/interfaces/interface';
+import {
+  AuthContextType,
+  Props,
+  Booking,
+  BookingContextType
+} from '@/interfaces/interface';
 
 export const AuthenticationContext = createContext<AuthContextType>({
   user: '',
@@ -10,12 +15,14 @@ export const AuthenticationContext = createContext<AuthContextType>({
   login: () => {},
   register: () => {},
   checkUserLogin: () => {},
-  logout: () => {}
+  logout: () => {},
+  addBooking: () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [error, setError] = useState('');
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   const router = useRouter();
   useEffect(() => {
@@ -102,6 +109,35 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
+  // const fetchBookings = async () => {
+  //   try {
+  //     const { data } = await axios.get(
+  //       'http://localhost:3000/api/user/bookings/'
+  //     );
+  //     setBookings(data);
+  //   } catch (err) {
+  //     console.log('Error fetching bookings:', err);
+  //   }
+  // };
+  // Function to add a new booking
+
+  const addBooking = async (newBooking: Booking) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: 'Bearer ' + accessToken
+        }
+      };
+      const { data } = await axios.post(
+        'http://localhost:3000/api/user/bookings/',
+        bookings,
+        config
+      );
+      setBookings([...bookings, data]);
+    } catch (err) {
+      console.log('Error adding booking:', err);
+    }
+  };
   const authContextValue: AuthContextType = {
     user,
     accessToken,
@@ -109,7 +145,8 @@ export const AuthenticationProvider = ({ children }: Props) => {
     login,
     register,
     checkUserLogin,
-    logout
+    logout,
+    addBooking
   };
   return (
     <AuthenticationContext.Provider value={authContextValue}>

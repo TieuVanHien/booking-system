@@ -21,6 +21,7 @@ export interface AuthContextType {
   register: (username: string, email: string, password: string) => void;
   checkUserLogin: () => void;
   logout: () => void;
+  addBooking: (newBooking: Booking) => void;
 }
 export interface Props {
   children?: ReactNode;
@@ -37,4 +38,17 @@ export interface NewEvent {
   title: string;
   start: Date | null;
   end: Date | null;
+}
+
+export interface Booking {
+  id: number;
+  title: string;
+  service: string;
+  duration: number;
+  start: string;
+  end: string;
+}
+
+export interface BookingContextType {
+  bookings: Booking[];
 }
