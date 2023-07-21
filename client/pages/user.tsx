@@ -16,6 +16,7 @@ const User = () => {
         const response = await fetch('/api/user', {});
         const data = await response.json();
         setUserData(data.user);
+        console.log(data.user);
       } catch (error) {
         console.error(error);
       }

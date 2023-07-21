@@ -37,6 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       body,
       config
     );
+    console.log(userId);
     return res.status(201).json(response.data);
   } catch (error: any) {
     console.error('Error creating booking:', error.message);

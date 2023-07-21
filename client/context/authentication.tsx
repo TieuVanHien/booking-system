@@ -9,14 +9,14 @@ import {
 } from '@/interfaces/interface';
 
 export const AuthenticationContext = createContext<AuthContextType>({
-  user: '',
+  user: null,
   accessToken: '',
   error: '',
   login: () => {},
   register: () => {},
   checkUserLogin: () => {},
   logout: () => {},
-  addBooking: () => {}
+  addBooking: async () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState(null);
@@ -129,7 +129,7 @@ export const AuthenticationProvider = ({ children }: Props) => {
         }
       };
       const { data } = await axios.post(
-        'http://localhost:3000/api/user/bookings/',
+        'http://localhost:3000/api/booking',
         bookings,
         config
       );

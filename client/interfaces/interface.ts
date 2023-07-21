@@ -6,6 +6,7 @@ export interface SidebarProps {
 export interface UserProps {
   username: string;
   email: string;
+  id: number;
 }
 
 export interface ModalComponentProps {
@@ -14,14 +15,14 @@ export interface ModalComponentProps {
   children: React.ReactNode;
 }
 export interface AuthContextType {
-  user: null | string;
+  user: UserProps | null;
   accessToken: null | string;
   error: string;
   login: (email: string, password: string) => void;
   register: (username: string, email: string, password: string) => void;
   checkUserLogin: () => void;
   logout: () => void;
-  addBooking: (newBooking: Booking) => void;
+  addBooking: (newBooking: NewEvent, user_id: number) => Promise<void>;
 }
 export interface Props {
   children?: ReactNode;
@@ -35,7 +36,10 @@ export interface Service {
 }
 
 export interface NewEvent {
+  id: number;
   title: string;
+  service: string | null;
+  duration: number;
   start: Date | null;
   end: Date | null;
 }
@@ -43,10 +47,10 @@ export interface NewEvent {
 export interface Booking {
   id: number;
   title: string;
-  service: string;
+  service: string | null;
   duration: number;
-  start: string;
-  end: string;
+  start: Date | null;
+  end: Date | null;
 }
 
 export interface BookingContextType {

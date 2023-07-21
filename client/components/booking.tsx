@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import DatePicker from 'react-datepicker';
@@ -6,6 +6,7 @@ import { Service, NewEvent } from '@/interfaces/interface';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Typography } from '@mui/material';
 import { ModalComponent } from '@/components/index';
+import { AuthenticationContext } from '@/context/authentication';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
 
@@ -74,44 +75,62 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
 
 const Booking = () => {
   const [event, setEvent] = useState<NewEvent>({
+    id: 0,
     title: '',
+    service: '',
+    duration: 0,
     start: null,
     end: null
   });
-  const [allEvents, setAllEvents] = useState<NewEvent[]>(events);
+  const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
   const [selectedService, setSelectedService] = useState<Service | null>();
   const [openModal, setOpenModal] = useState(false);
+
+  const { addBooking, user } = useContext(AuthenticationContext);
 
   const handleServiceChange = (serviceId: number) => {
     const service = services.find((s) => s.id === serviceId);
     setSelectedService(service || null);
   };
 
-  const handleAddEvent = (e: any) => {
+  const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      event.title &&
-      event.start &&
-      selectedService &&
-      selectedService.duration !== null
-    ) {
-      const end = new Date(event.start);
-      end.setMinutes(event.start.getMinutes() + selectedService.duration);
-      const newEvent: NewEvent = {
-        title: `${selectedService.name} - ${event.title}`,
-        start: event.start,
-        end: new Date(end)
-      };
-      setAllEvents([...allEvents, newEvent]);
-      setEvent({ title: '', start: null, end: null });
-      setSelectedService(null);
-      try {
-        console.log(newEvent);
-      } catch (e) {
-        console.log(e);
+    if (user) {
+      const user_id = user?.id;
+      if (
+        event.title &&
+        event.start &&
+        selectedService &&
+        selectedService.duration !== null
+      ) {
+        const end = new Date(event.start);
+        end.setMinutes(event.start.getMinutes() + selectedService.duration);
+        const newEvent: NewEvent = {
+          ...event,
+          service: selectedService.name,
+          duration: selectedService.duration,
+          end: new Date(end)
+        };
+        setAllEvents([...allEvents, newEvent]);
+        setEvent({
+          id: 0,
+          title: '',
+          service: '',
+          duration: 0,
+          start: null,
+          end: null
+        });
+        setSelectedService(null);
+        console.log(newEvent, user_id);
+        try {
+          await addBooking(newEvent, user_id);
+        } catch (error) {
+          console.log('Error adding booking:', error);
+        }
       }
     }
   };
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
