@@ -2,19 +2,27 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from .models import Booking
 
-#     class Meta:
-#         model = Booking
-#         fields = ['url', 'service', 'duration', 'title', 'start', 'end', 'user','booking_detail_url' ]
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    is_staff = serializers.BooleanField()
+class BookingHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
+    def get_url(self, obj, view_name, request, format):
+        lookup_value = getattr(obj, self.lookup_field)
+        kwargs = {self.lookup_url_kwarg: lookup_value, 'user_id': obj.user.id}
+        return self.reverse(view_name, kwargs=kwargs, request=request, format=format)
 
-    def create(self, validated_data):
-        user = User.objects.create(**validated_data)
-        return user
+class BookingSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        model = Booking
+        fields = ['url', 'service', 'duration', 'title', 'start', 'end', 'user']
+        lookup_field = 'id'
+
+class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField()
+    bookings = BookingSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff', 'groups']
+        fields = ['url', 'username', 'email', 'is_staff', 'groups', 'bookings']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -45,4 +53,3 @@ class AdminUserSerializer(serializers.HyperlinkedModelSerializer):
             'password': {'write_only': True},
         }
 
-        
