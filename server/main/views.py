@@ -75,11 +75,18 @@ class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
     permission_classes = [permissions.IsAuthenticated]
-        
-class AdminUserBookingsView(ListAPIView):
-    serializer_class = BookingSerializer
-    permission_classes = [permissions.IsAdminUser]
 
-    def get_queryset(self):
-        user_id = self.kwargs['user_id']
-        return Booking.objects.filter(user__id=user_id)        
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
+class UserBookingViewSet(viewsets.ViewSet):
+    queryset = Booking.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BookingSerializer
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)     

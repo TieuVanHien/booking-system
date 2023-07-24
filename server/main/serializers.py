@@ -8,8 +8,13 @@ class BookingHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
         kwargs = {self.lookup_url_kwarg: lookup_value, 'user_id': obj.user.id}
         return self.reverse(view_name, kwargs=kwargs, request=request, format=format)
 
+class UsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','username', 'url']  
 class BookingSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
+    user = UsernameSerializer(read_only=True)
 
     class Meta:
         model = Booking
@@ -22,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff', 'groups', 'bookings']
+        fields = ['url','id', 'username', 'email', 'is_staff', 'groups', 'bookings']
         extra_kwargs = {
             'password': {'write_only': True},
         }

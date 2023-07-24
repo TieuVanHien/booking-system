@@ -8,7 +8,7 @@ class Booking(models.Model):
     duration = models.CharField(max_length=255)
     start = models.DateTimeField()
     end = models.DateTimeField()
-
+    username = models.CharField(User, max_length=255)
     def __str__(self):
         return self.title
 
