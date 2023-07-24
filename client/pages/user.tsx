@@ -48,6 +48,7 @@ const User = () => {
           <Image src="" alt="test" />
           <h3>@{user?.username}</h3>
           <p>{user?.email}</p>
+          <p>{user?.id}</p>
         </div>
         <div className="btm-sidebar">
           <Sidebar setSelectedLink={setSelectedLink} />

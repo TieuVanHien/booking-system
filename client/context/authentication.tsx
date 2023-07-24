@@ -121,7 +121,7 @@ export const AuthenticationProvider = ({ children }: Props) => {
   // };
   // Function to add a new booking
 
-  const addBooking = async (newBooking: Booking) => {
+  const addBooking = async () => {
     try {
       const config = {
         headers: {

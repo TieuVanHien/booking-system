@@ -36,7 +36,7 @@ export interface Service {
 }
 
 export interface NewEvent {
-  id: number;
+  id: string | null;
   title: string;
   service: string | null;
   duration: number;

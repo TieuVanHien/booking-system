@@ -7,6 +7,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Typography } from '@mui/material';
 import { ModalComponent } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
+import { UserProps } from '@/interfaces/interface';
+import shortid from 'shortid';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
 
@@ -75,7 +77,7 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
 
 const Booking = () => {
   const [event, setEvent] = useState<NewEvent>({
-    id: 0,
+    id: shortid.generate(),
     title: '',
     service: '',
     duration: 0,
@@ -85,9 +87,22 @@ const Booking = () => {
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
   const [selectedService, setSelectedService] = useState<Service | null>();
   const [openModal, setOpenModal] = useState(false);
+  const [user, setUserData] = useState<UserProps | null>(null);
 
-  const { addBooking, user } = useContext(AuthenticationContext);
-
+  const { addBooking } = useContext(AuthenticationContext);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user', {});
+        const data = await response.json();
+        setUserData(data.user);
+        console.log(data.user);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserData();
+  }, []);
   const handleServiceChange = (serviceId: number) => {
     const service = services.find((s) => s.id === serviceId);
     setSelectedService(service || null);
@@ -113,7 +128,7 @@ const Booking = () => {
         };
         setAllEvents([...allEvents, newEvent]);
         setEvent({
-          id: 0,
+          id: shortid.generate(),
           title: '',
           service: '',
           duration: 0,
@@ -121,6 +136,7 @@ const Booking = () => {
           end: null
         });
         setSelectedService(null);
+        console.log(user_id);
         console.log(newEvent, user_id);
         try {
           await addBooking(newEvent, user_id);
