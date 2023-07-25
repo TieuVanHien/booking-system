@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import {
   AuthContextType,
-  Props,
-  Booking,
-  BookingContextType
+  Props
+  // Booking,
+  // BookingContextType
 } from '@/interfaces/interface';
 
 export const AuthenticationContext = createContext<AuthContextType>({
@@ -15,14 +15,14 @@ export const AuthenticationContext = createContext<AuthContextType>({
   login: () => {},
   register: () => {},
   checkUserLogin: () => {},
-  logout: () => {},
-  addBooking: async () => {}
+  logout: () => {}
+  // addBooking: async () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [error, setError] = useState('');
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  // const [bookings, setBookings] = useState<Booking[]>([]);
 
   const router = useRouter();
   useEffect(() => {
@@ -121,23 +121,24 @@ export const AuthenticationProvider = ({ children }: Props) => {
   // };
   // Function to add a new booking
 
-  const addBooking = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: 'Bearer ' + accessToken
-        }
-      };
-      const { data } = await axios.post(
-        'http://localhost:3000/api/booking',
-        bookings,
-        config
-      );
-      setBookings([...bookings, data]);
-    } catch (err) {
-      console.log('Error adding booking:', err);
-    }
-  };
+  // const addBooking = async () => {
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         Authorization: 'Bearer ' + accessToken
+  //       }
+  //     };
+  //     const { data } = await axios.post(
+  //       'http://localhost:3000/api/booking',
+  //       bookings,
+  //       config
+  //     );
+  //     console.log(data);
+  //     setBookings([...bookings, data]);
+  //   } catch (err) {
+  //     console.log('Error adding booking:', err);
+  //   }
+  // };
   const authContextValue: AuthContextType = {
     user,
     accessToken,
@@ -145,8 +146,8 @@ export const AuthenticationProvider = ({ children }: Props) => {
     login,
     register,
     checkUserLogin,
-    logout,
-    addBooking
+    logout
+    // addBooking
   };
   return (
     <AuthenticationContext.Provider value={authContextValue}>

@@ -6,7 +6,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Invalid Method' });
   }
   if (req.method == 'POST') {
-    const { userId, title, service, duration, start, end } = req.body;
+    const userId = 22;
+    const { title, service, duration, start, end } = req.body;
+    console.log(title, service, duration, start, end, userId);
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
     if (!accessToken) {
       return res

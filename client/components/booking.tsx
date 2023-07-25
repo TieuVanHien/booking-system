@@ -9,6 +9,7 @@ import { ModalComponent } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
 import { UserProps } from '@/interfaces/interface';
 import shortid from 'shortid';
+import axios from 'axios';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
 
@@ -41,27 +42,6 @@ const services: Service[] = [
   }
 ];
 
-const events = [
-  {
-    title: `${services[0].name} - Book 1`,
-    start: new Date(2023, 7, 10, 12),
-    duration: 60,
-    end: new Date(2023, 7, 10, 1)
-  },
-  {
-    title: `${services[1].name} - Book 2`,
-    start: new Date(2023, 7, 11, 1),
-    duration: 60,
-    end: new Date(2023, 7, 11, 2)
-  },
-  {
-    title: `${services[2].name} - Book 3`,
-    start: new Date(2023, 7, 12, 3),
-    duration: 60,
-    end: new Date(2023, 7, 12, 4)
-  }
-];
-
 const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
   <div>
     <strong>{event.title}</strong>
@@ -88,8 +68,8 @@ const Booking = () => {
   const [selectedService, setSelectedService] = useState<Service | null>();
   const [openModal, setOpenModal] = useState(false);
   const [user, setUserData] = useState<UserProps | null>(null);
-
-  const { addBooking } = useContext(AuthenticationContext);
+  const { accessToken } = useContext(AuthenticationContext);
+  // const { addBooking } = useContext(AuthenticationContext);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -135,11 +115,22 @@ const Booking = () => {
           start: null,
           end: null
         });
+
         setSelectedService(null);
         console.log(user_id);
-        console.log(newEvent, user_id);
         try {
-          await addBooking(newEvent, user_id);
+          const config = {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          };
+          const body = {
+            ...newEvent,
+            user_id
+          };
+          await axios.post(`/api/booking`, body, config);
+          console.log(newEvent);
+          console.log('Booking added successfully!');
         } catch (error) {
           console.log('Error adding booking:', error);
         }
@@ -176,6 +167,7 @@ const Booking = () => {
         <button type="button" onClick={handleOpenModal}>
           <h3>Add New Booking</h3>
         </button>
+        {/* <form onSubmit={handleAddEvent}> */}
         <ModalComponent open={openModal} onClose={handleCloseModal}>
           <Typography>
             <div className="input-form flex flex-col justify-center">
@@ -220,6 +212,7 @@ const Booking = () => {
             </div>
           </Typography>
         </ModalComponent>
+        {/* </form> */}
       </div>
     </section>
   );
