@@ -15,12 +15,14 @@ class UsernameSerializer(serializers.ModelSerializer):
 class BookingSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
     user = UsernameSerializer(read_only=True)
+    start = serializers.DateTimeField(format="%d %B %Y %H:%M")
+    end = serializers.DateTimeField(format="%d %B %Y %H:%M")
 
     class Meta:
         model = Booking
         fields = ['url', 'service', 'duration', 'title', 'start', 'end', 'user']
         lookup_field = 'id'
-
+        
 class UserSerializer(serializers.ModelSerializer):
     is_staff = serializers.BooleanField()
     bookings = BookingSerializer(many=True, read_only=True)
