@@ -4,6 +4,7 @@ from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAP
 # from rest_framework.views import APIView
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets, permissions, serializers, status
+from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from .models import Booking
 from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer, BookingSerializer
@@ -78,15 +79,17 @@ class BookingViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        
-class UserBookingViewSet(viewsets.ViewSet):
+     
+class UserBookingViewSet(ListCreateAPIView):
     queryset = Booking.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = BookingSerializer
 
-    def create(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)     
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Booking.objects.filter(user_id=user_id)
+
+    def perform_create(self, serializer):
+        user_id = self.kwargs['user_id']
+        serializer.save(user_id=user_id)
+     
