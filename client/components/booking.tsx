@@ -69,7 +69,7 @@ const Booking = () => {
   const [openModal, setOpenModal] = useState(false);
   const [user, setUserData] = useState<UserProps | null>(null);
   const { accessToken } = useContext(AuthenticationContext);
-  // const { addBooking } = useContext(AuthenticationContext);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -91,7 +91,7 @@ const Booking = () => {
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (user) {
-      const user_id = user?.id;
+      const userId = user?.id;
       if (
         event.title &&
         event.start &&
@@ -115,9 +115,8 @@ const Booking = () => {
           start: null,
           end: null
         });
-
         setSelectedService(null);
-        console.log(user_id);
+        console.log(userId);
         try {
           const config = {
             headers: {
@@ -126,7 +125,7 @@ const Booking = () => {
           };
           const body = {
             ...newEvent,
-            user_id
+            userId
           };
           await axios.post(`/api/booking`, body, config);
           console.log(newEvent);
@@ -137,7 +136,6 @@ const Booking = () => {
       }
     }
   };
-
   const handleOpenModal = () => {
     setOpenModal(true);
   };

@@ -22,7 +22,6 @@ export interface AuthContextType {
   register: (username: string, email: string, password: string) => void;
   checkUserLogin: () => void;
   logout: () => void;
-  // addBooking: (newBooking: NewEvent, user_id: number) => Promise<void>;
 }
 export interface Props {
   children?: ReactNode;
