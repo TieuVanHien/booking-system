@@ -7,7 +7,6 @@ import axios from 'axios';
 import moment from 'moment';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
-
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -17,9 +16,6 @@ const localizer = dateFnsLocalizer({
 });
 
 const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => {
-  console.log('Event Start:', event.start);
-  console.log('Event End:', event.end);
-
   const start = format(event.start, 'dd MMMM yyyy HH:mm');
   const end = format(event.end, 'dd MMMM yyyy HH:mm');
 
@@ -45,8 +41,6 @@ const CalendarComponent = () => {
       try {
         const response = await axios.get('/api/events');
         const eventsFromServer = response.data;
-
-        // Convert the start and end values from strings to Date objects
         const formattedEvents = eventsFromServer.map((event: NewEvent) => ({
           ...event,
           start: new Date(event.start),
@@ -58,7 +52,6 @@ const CalendarComponent = () => {
         console.error('Error fetching events:', error.message);
       }
     };
-
     fetchEvents();
   }, []);
 

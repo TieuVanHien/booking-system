@@ -16,19 +16,16 @@ export const AuthenticationContext = createContext<AuthContextType>({
   register: () => {},
   checkUserLogin: () => {},
   logout: () => {}
-  // addBooking: async () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [error, setError] = useState('');
-  // const [bookings, setBookings] = useState<Booking[]>([]);
 
   const router = useRouter();
   useEffect(() => {
     checkUserLogin();
   }, []);
-  //create next.js api for login
   const login = async (username: string, password: string) => {
     const config = {
       headers: {
@@ -64,7 +61,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
-  //create next.js api for registration
   const register = async (
     username: string,
     email: string,
@@ -88,7 +84,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
-  // keep user logged in
   const checkUserLogin = async (): Promise<void> => {
     try {
       const { data } = await axios.post('http://localhost:3000/api/user');
@@ -98,7 +93,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
-  // logout user
   const logout = async (): Promise<void> => {
     try {
       await axios.post('http://localhost:3000/api/logout');
@@ -109,36 +103,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
-  // const fetchBookings = async () => {
-  //   try {
-  //     const { data } = await axios.get(
-  //       'http://localhost:3000/api/user/bookings/'
-  //     );
-  //     setBookings(data);
-  //   } catch (err) {
-  //     console.log('Error fetching bookings:', err);
-  //   }
-  // };
-  // Function to add a new booking
-
-  // const addBooking = async () => {
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         Authorization: 'Bearer ' + accessToken
-  //       }
-  //     };
-  //     const { data } = await axios.post(
-  //       'http://localhost:3000/api/booking',
-  //       bookings,
-  //       config
-  //     );
-  //     console.log(data);
-  //     setBookings([...bookings, data]);
-  //   } catch (err) {
-  //     console.log('Error adding booking:', err);
-  //   }
-  // };
   const authContextValue: AuthContextType = {
     user,
     accessToken,
@@ -147,7 +111,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
     register,
     checkUserLogin,
     logout
-    // addBooking
   };
   return (
     <AuthenticationContext.Provider value={authContextValue}>

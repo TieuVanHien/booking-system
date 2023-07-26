@@ -9,7 +9,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == 'POST') {
     const userId = 22;
     const { title, service, duration, start, end } = req.body;
-    console.log(title, service, duration, start, end, userId);
     if (!req.headers.cookie) {
       return res.status(403).json({ message: 'Unauthorized' });
     }
@@ -85,7 +84,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const response = await axios.get(
         `http://127.0.0.1:8000/api/users/${userId}/bookings/`
       );
-
       return res.status(200).json(response.data);
     } catch (error: any) {
       console.error('Error retrieving bookings:', error.message);

@@ -136,7 +136,6 @@ const Booking = () => {
         <button type="button" onClick={handleOpenModal}>
           <h3>Add New Booking</h3>
         </button>
-        {/* <form onSubmit={handleAddEvent}> */}
         <ModalComponent open={openModal} onClose={handleCloseModal}>
           <Typography>
             <div className="input-form flex flex-col justify-center">
@@ -181,7 +180,6 @@ const Booking = () => {
             </div>
           </Typography>
         </ModalComponent>
-        {/* </form> */}
       </div>
     </section>
   );
