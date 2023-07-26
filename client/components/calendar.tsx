@@ -3,6 +3,7 @@ import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { NewEvent } from '@/interfaces/interface';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { UserProps } from '@/interfaces/interface';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -20,9 +21,9 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => {
   const end = format(event.end, 'dd MMMM yyyy HH:mm');
 
   return (
-    <div>
-      <strong>{event.title}</strong>
-      <br />
+    <div className="flex flex-col">
+      <p>{event.title}</p>
+      <p>{event.service}</p>
       {start && end && (
         <>
           {moment(start).format('MMMM D, YYYY hh:mm a')} -{' '}
@@ -35,6 +36,45 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => {
 
 const CalendarComponent = () => {
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
+  const [user, setUser] = useState<UserProps | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user', {});
+        const data = await response.json();
+        setUser(data.user);
+        console.log(data.user);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserData();
+  }, []);
+  useEffect(() => {
+    if (user) {
+      const fetchEvents = async () => {
+        try {
+          const response = await axios.get('/api/events');
+          const eventsFromServer = response.data;
+          const filteredEvents = eventsFromServer.filter(
+            (event: any) => event.user?.id === user.id
+          );
+
+          const formattedEvents = filteredEvents.map((event: any) => ({
+            ...event,
+            start: new Date(event.start),
+            end: new Date(event.end)
+          }));
+
+          setAllEvents(formattedEvents);
+        } catch (error: any) {
+          console.error('Error fetching events:', error.message);
+        }
+      };
+      fetchEvents();
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -64,7 +104,7 @@ const CalendarComponent = () => {
           events={allEvents}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 500, width: 900, margin: '2em' }}
+          style={{ height: 550, width: 900, margin: '2em' }}
           components={{
             event: EventComponent
           }}

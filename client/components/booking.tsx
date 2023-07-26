@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import { Service, NewEvent } from '@/interfaces/interface';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -54,7 +52,6 @@ const Booking = () => {
         const response = await fetch('/api/user', {});
         const data = await response.json();
         setUserData(data.user);
-        console.log(data.user);
       } catch (error) {
         console.error(error);
       }
@@ -106,7 +103,6 @@ const Booking = () => {
             userId
           };
           await axios.post(`/api/booking`, body, config);
-          console.log(newEvent);
           console.log('Booking added successfully!');
         } catch (error) {
           console.log('Error adding booking:', error);

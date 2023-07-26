@@ -38,39 +38,41 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           'http://127.0.0.1:8000/api/user/',
           userConfig
         );
+
         res.status(200).json({ user: userData, access: userData.access });
+        const userId = userData.id;
+        try {
+          const accessToken = data.access;
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`
+            }
+          };
+          const body = {
+            title,
+            service,
+            duration,
+            start,
+            end
+          };
+          try {
+            const response = await axios.post(
+              `http://127.0.0.1:8000/api/users/${userId}/bookings/`,
+              body,
+              config
+            );
+            console.log(response.data);
+            return res.status(201).json(response.data);
+          } catch (error: any) {
+            console.error('Error creating booking:', error.message);
+          }
+        } catch (error: any) {
+          console.log(error.message);
+        }
       } else {
         res.status(500).json({ message: 'Something went wrong' });
-      }
-      try {
-        const accessToken = data.access;
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`
-          }
-        };
-        const body = {
-          title,
-          service,
-          duration,
-          start,
-          end
-        };
-        try {
-          const response = await axios.post(
-            `http://127.0.0.1:8000/api/users/${userId}/bookings/`,
-            body,
-            config
-          );
-          console.log(response.data);
-          return res.status(201).json(response.data);
-        } catch (error: any) {
-          console.error('Error creating booking:', error.message);
-        }
-      } catch (error: any) {
-        console.log(error.message);
       }
     } catch (err) {
       console.log(err);
