@@ -39,8 +39,8 @@ export interface NewEvent {
   title: string;
   service: string | null;
   duration: number;
-  start: Date | null;
-  end: Date | null;
+  start: Date;
+  end: Date;
 }
 
 export interface Booking {
@@ -48,8 +48,8 @@ export interface Booking {
   title: string;
   service: string | null;
   duration: number;
-  start: Date | null;
-  end: Date | null;
+  start: Date;
+  end: Date;
 }
 
 export interface BookingContextType {

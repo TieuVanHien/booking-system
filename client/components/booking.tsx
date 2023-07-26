@@ -9,17 +9,8 @@ import { ModalComponent } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
 import { UserProps } from '@/interfaces/interface';
 import shortid from 'shortid';
+import { CalendarComponent } from '@/components';
 import axios from 'axios';
-
-const locales = { 'en-US': require('date-fns/locale/en-US') };
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales
-});
 
 const services: Service[] = [
   {
@@ -42,27 +33,14 @@ const services: Service[] = [
   }
 ];
 
-const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => (
-  <div>
-    <strong>{event.title}</strong>
-    <br />
-    {event.start && event.end && (
-      <>
-        {format(event.start, 'MMMM d, yyyy hh:mm a')} -{' '}
-        {format(event.end, 'MMMM d, yyyy hh:mm a')}
-      </>
-    )}
-  </div>
-);
-
 const Booking = () => {
   const [event, setEvent] = useState<NewEvent>({
     id: shortid.generate(),
     title: '',
     service: '',
     duration: 0,
-    start: null,
-    end: null
+    start: new Date(),
+    end: new Date()
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
   const [selectedService, setSelectedService] = useState<Service | null>();
@@ -112,8 +90,8 @@ const Booking = () => {
           title: '',
           service: '',
           duration: 0,
-          start: null,
-          end: null
+          start: new Date(),
+          end: new Date()
         });
         setSelectedService(null);
         console.log(userId);
@@ -136,6 +114,11 @@ const Booking = () => {
       }
     }
   };
+  const handleStartDateChange = (start: Date | null) => {
+    if (start !== null) {
+      setEvent({ ...event, start });
+    }
+  };
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -148,19 +131,7 @@ const Booking = () => {
 
   return (
     <section className="booking flex flex-col justify-center items-center">
-      <h3>Calendar</h3>
-      <div className="calendar">
-        <Calendar
-          localizer={localizer}
-          events={allEvents}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 500, width: 900, margin: '2em' }}
-          components={{
-            event: EventComponent
-          }}
-        />
-      </div>
+      <CalendarComponent />
       <div className="book-form flex flex-col justify-center">
         <button type="button" onClick={handleOpenModal}>
           <h3>Add New Booking</h3>
@@ -184,7 +155,7 @@ const Booking = () => {
                 dateFormat="MMMM d, yyyy HH:mm"
                 timeCaption="Time"
                 minDate={new Date()}
-                onChange={(start) => setEvent({ ...event, start })}
+                onChange={handleStartDateChange}
               />
               <select
                 value={selectedService?.id || 0}
