@@ -59,13 +59,13 @@ const RegisterPage = () => {
           <h3 className="mb-6">Create Your Free Account</h3>
           <div className="form">
             <div className="flex flex-col">
-              <label className="mb-1">Username:</label>
+              <label className="mb-1">Full Name:</label>
               <input
                 type="text"
                 className="text-black"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your Username"
+                placeholder="Enter your full name"
               />
             </div>
             <div className="flex flex-col">
