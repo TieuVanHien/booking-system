@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url','id', 'username', 'email', 'is_staff', 'groups', 'bookings']
+        fields = ['url','id', 'username', 'first_name','last_name','email', 'is_staff', 'groups', 'bookings']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -37,14 +37,14 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterUserSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
-            username = validated_data['username'],
+            username = validated_data['username'],    
             email = validated_data['email'],
             password= validated_data['password']
         )
         return user
     class Meta:
         model = User
-        fields =    ['url','username', 'email', 'password', 'groups']
+        fields = ['url','username', 'email', 'last_name', 'first_name','password', 'groups']
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group

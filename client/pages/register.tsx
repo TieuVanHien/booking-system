@@ -7,6 +7,8 @@ import Link from 'next/link';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
@@ -30,7 +32,7 @@ const RegisterPage = () => {
       setError('Your password does not match');
     }
     try {
-      register(username, email, password);
+      register(username, firstname, lastname, email, password);
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
         setError('User with username or email already exists');
@@ -59,13 +61,33 @@ const RegisterPage = () => {
           <h3 className="mb-6">Create Your Free Account</h3>
           <div className="form">
             <div className="flex flex-col">
-              <label className="mb-1">Full Name:</label>
+              <label className="mb-1">Username:</label>
               <input
                 type="text"
                 className="text-black"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your full name"
+                placeholder="Enter your username"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1">First Name:</label>
+              <input
+                type="text"
+                className="text-black"
+                value={firstname}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Enter your username"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1">Last Name:</label>
+              <input
+                type="text"
+                className="text-black"
+                value={lastname}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Enter your username"
               />
             </div>
             <div className="flex flex-col">

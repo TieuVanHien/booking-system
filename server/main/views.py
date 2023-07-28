@@ -39,21 +39,22 @@ class RegisterUserAPIView(CreateAPIView):
         username = serializer.validated_data.get('username')
         email = serializer.validated_data.get('email')
         
-        if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError('Username is already registered.')
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError('Email is already registered.')
         serializer.save()
-        
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        try:
-            self.perform_create(serializer)
-        except serializers.ValidationError as e:
-            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
+        print(serializer.initial_data)  # Check the data being sent
+        if serializer.is_valid(raise_exception=True):
+            try:
+                self.perform_create(serializer)
+            except serializers.ValidationError as err:
+                return Response({'message': err}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': 'Registration successful'}, status=status.HTTP_201_CREATED)
+
+   
+
 
 class AdminUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().filter(is_superuser=True)

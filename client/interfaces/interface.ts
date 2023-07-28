@@ -19,7 +19,13 @@ export interface AuthContextType {
   accessToken: null | string;
   error: string;
   login: (email: string, password: string) => void;
-  register: (username: string, email: string, password: string) => void;
+  register: (
+    username: string,
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string
+  ) => void;
   checkUserLogin: () => void;
   logout: () => void;
 }

@@ -6,7 +6,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Invalid Method' });
   }
   if (req.method === 'POST') {
-    const { username, email, password } = req.body;
+    const { username, firstname, lastname, email, password } = req.body;
     try {
       const config = {
         headers: {
@@ -16,6 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
       const body = {
         username,
+        firstname,
+        lastname,
         email,
         password
       };

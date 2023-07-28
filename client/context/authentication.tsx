@@ -63,6 +63,8 @@ export const AuthenticationProvider = ({ children }: Props) => {
   };
   const register = async (
     username: string,
+    firstname: string,
+    lastname: string,
     email: string,
     password: string
   ) => {
@@ -74,6 +76,8 @@ export const AuthenticationProvider = ({ children }: Props) => {
     };
     const body = {
       username,
+      firstname,
+      lastname,
       email,
       password
     };
