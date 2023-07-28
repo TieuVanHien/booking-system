@@ -7,8 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Invalid Method' });
   }
   if (req.method == 'POST') {
-    const userId = 22;
-    const { title, service, duration, start, end } = req.body;
+    const { title, service, duration, start, phone, end } = req.body;
     if (!req.headers.cookie) {
       return res.status(403).json({ message: 'Unauthorized' });
     }
@@ -54,6 +53,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             title,
             service,
             duration,
+            phone,
             start,
             end
           };

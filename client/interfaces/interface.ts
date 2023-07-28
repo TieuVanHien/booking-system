@@ -44,6 +44,7 @@ export interface NewEvent {
   id: string | null;
   title: string;
   service: string | null;
+  phone: string;
   duration: number;
   start: Date;
   end: Date;

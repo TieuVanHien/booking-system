@@ -37,6 +37,7 @@ const Booking = () => {
     title: '',
     service: '',
     duration: 0,
+    phone: '',
     start: new Date(),
     end: new Date()
   });
@@ -44,7 +45,11 @@ const Booking = () => {
   const [selectedService, setSelectedService] = useState<Service | null>();
   const [openModal, setOpenModal] = useState(false);
   const [user, setUserData] = useState<UserProps | null>(null);
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [error, setError] = useState('');
   const { accessToken } = useContext(AuthenticationContext);
+  const phoneRegex =
+    /^\+?\d{1,3}?[-.\s]?\(?\d{2,3}\)?[-.\s]?\d{2,4}[-.\s]?\d{4}$/;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,6 +67,10 @@ const Booking = () => {
     const service = services.find((s) => s.id === serviceId);
     setSelectedService(service || null);
   };
+  const handlePhoneNumberChange = (value: string) => {
+    setEvent({ ...event, phone: value });
+    setIsPhoneValid(phoneRegex.test(value));
+  };
 
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,8 +80,13 @@ const Booking = () => {
         event.title &&
         event.start &&
         selectedService &&
+        event.phone &&
         selectedService.duration !== null
       ) {
+        if (!isPhoneValid) {
+          setError('Please enter a valid phone number!');
+          return error;
+        }
         const end = new Date(event.start);
         end.setMinutes(event.start.getMinutes() + selectedService.duration);
         const newEvent: NewEvent = {
@@ -87,6 +101,7 @@ const Booking = () => {
           title: '',
           service: '',
           duration: 0,
+          phone: '',
           start: new Date(),
           end: new Date()
         });
@@ -110,6 +125,10 @@ const Booking = () => {
       }
     }
   };
+  useEffect(() => {
+    setError(isPhoneValid ? '' : 'Please enter a valid phone number!');
+  }, [isPhoneValid]);
+
   const handleStartDateChange = (start: Date | null) => {
     if (start !== null) {
       setEvent({ ...event, start });
@@ -134,12 +153,18 @@ const Booking = () => {
         </button>
         <ModalComponent open={openModal} onClose={handleCloseModal}>
           <Typography>
-            <div className="input-form flex flex-col justify-center">
+            <div className="input-form flex flex-col justify-between">
               <input
                 type="text"
                 placeholder="Add Title"
                 value={event.title}
                 onChange={(e) => setEvent({ ...event, title: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Enter your phone number"
+                value={event.phone}
+                onChange={(e) => handlePhoneNumberChange(e.target.value)}
               />
               <DatePicker
                 placeholderText="Start Date"
@@ -167,12 +192,20 @@ const Booking = () => {
                 <div>Service Duration: {selectedService.duration} minutes</div>
               )}
               <button
-                className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18"
+                className={`button ${
+                  isPhoneValid
+                    ? 'hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18'
+                    : 'disabled-button'
+                } `}
                 type="submit"
+                disabled={!isPhoneValid}
                 onClick={handleAddEvent}
               >
                 Submit
               </button>
+              {error && (
+                <p className="mt-4 flex justify-center items-center">{error}</p>
+              )}
             </div>
           </Typography>
         </ModalComponent>
