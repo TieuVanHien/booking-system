@@ -9,6 +9,7 @@ class Booking(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     username = models.CharField(User, max_length=255)
+    phone = models.CharField(max_length=17, blank=True, null=True)
     def __str__(self):
         return self.title
 

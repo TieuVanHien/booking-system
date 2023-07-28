@@ -20,7 +20,7 @@ class BookingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['url', 'service', 'duration', 'title', 'start', 'end', 'user']
+        fields = ['url', 'title','phone','service', 'duration', 'start', 'end', 'user']
         lookup_field = 'id'
         
 class UserSerializer(serializers.ModelSerializer):

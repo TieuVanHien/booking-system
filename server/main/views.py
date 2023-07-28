@@ -1,10 +1,6 @@
-from django.shortcuts import render, redirect
-from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAPIView, ListAPIView
-# from django.shortcuts import get_object_or_404
-# from rest_framework.views import APIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAPIView
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets, permissions, serializers, status
-from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from .models import Booking
 from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer, BookingSerializer
@@ -41,6 +37,8 @@ class RegisterUserAPIView(CreateAPIView):
         
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError('Email is already registered.')
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError('Username is already registered.')
         serializer.save()
     
     def create(self, request, *args, **kwargs):
@@ -52,9 +50,6 @@ class RegisterUserAPIView(CreateAPIView):
             except serializers.ValidationError as err:
                 return Response({'message': err}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': 'Registration successful'}, status=status.HTTP_201_CREATED)
-
-   
-
 
 class AdminUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().filter(is_superuser=True)
@@ -72,7 +67,6 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(is_staff=True, is_superuser=True)
         
-
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
