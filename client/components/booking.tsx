@@ -194,7 +194,7 @@ const Booking = () => {
               <button
                 className={`button ${
                   isPhoneValid
-                    ? 'hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18'
+                    ? 'bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18'
                     : 'disabled-button'
                 } `}
                 type="submit"
