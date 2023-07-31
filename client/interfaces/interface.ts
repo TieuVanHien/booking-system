@@ -50,6 +50,7 @@ export interface NewEvent {
   duration: number;
   start: Date;
   end: Date;
+  status: string | null;
 }
 
 export interface Booking {
