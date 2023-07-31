@@ -76,26 +76,6 @@ const CalendarComponent = () => {
       fetchEvents();
     }
   }, [user]);
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get('/api/events');
-        const eventsFromServer = response.data;
-        const formattedEvents = eventsFromServer.map((event: NewEvent) => ({
-          ...event,
-          start: new Date(event.start),
-          end: new Date(event.end)
-        }));
-
-        setAllEvents(formattedEvents);
-      } catch (error: any) {
-        console.error('Error fetching events:', error.message);
-      }
-    };
-    fetchEvents();
-  }, []);
-
   return (
     <section className="">
       <h3>Calendar</h3>
