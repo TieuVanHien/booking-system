@@ -16,8 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
       const body = {
         username,
-        firstname,
-        lastname,
+        first_name: firstname,
+        last_name: lastname,
         email,
         password
       };

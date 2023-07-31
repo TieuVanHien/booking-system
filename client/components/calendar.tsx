@@ -22,8 +22,9 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => {
 
   return (
     <div className="flex flex-col">
-      <p>{event.title}</p>
-      <p>{event.service}</p>
+      <p>Title: {event.title}</p>
+      <p>Request Service: {event.service}</p>
+      <p>Phone: {event.phone}</p>
       {start && end && (
         <>
           {moment(start).format('MMMM D, YYYY hh:mm a')} -{' '}
