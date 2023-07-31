@@ -93,15 +93,21 @@ const BookingHistory = () => {
                   <TableCell align="center">
                     {event.end.toLocaleString()}
                   </TableCell>
-                  <TableCell align="center">Status: {event.status}</TableCell>
+                  <TableCell align="center">
+                    <h5>{event.status}</h5>
+                  </TableCell>
                   <TableCell align="center">
                     {event.status === 'active' ? (
                       <>
                         <Button>Edit</Button>
                         <Button>Cancel</Button>
                       </>
+                    ) : event.status == 'Upcoming' ? (
+                      <>
+                        <Button>Cancel</Button>
+                      </>
                     ) : (
-                      <Button>Cancel</Button>
+                      'N/A'
                     )}
                   </TableCell>
                 </TableRow>

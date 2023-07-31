@@ -18,10 +18,15 @@ class Booking(models.Model):
         current_date = datetime.now(calgary_tz)
         event_start_mdt = self.start.astimezone(calgary_tz)
         two_hours_before_event = event_start_mdt - timedelta(hours=2)
-        if current_date >= two_hours_before_event:
+        thirty_mins_before_event = event_start_mdt - timedelta(minutes=30)
+
+        if current_date >= thirty_mins_before_event:
+            self.status = 'Upcoming'
+        elif current_date >= two_hours_before_event:
             self.status = 'Inactive'
         else:
             self.status = 'Active'
+        
         super(Booking, self).save(*args, **kwargs)
 
     def __str__(self):
