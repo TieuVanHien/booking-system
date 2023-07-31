@@ -11,7 +11,7 @@ class BookingHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username', 'url']  
+        fields = ['id','username', 'url', 'last_name', 'first_name']  
 class BookingSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
     user = UsernameSerializer(read_only=True)

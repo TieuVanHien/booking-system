@@ -46,8 +46,12 @@ const User = () => {
         <div className="top-sidebar">
           <Image src="" alt="test" />
           <h3>@{user?.username}</h3>
+          {user && (
+            <h4>
+              {user.first_name} {user.last_name}
+            </h4>
+          )}
           <p>{user?.email}</p>
-          <p>{user?.id}</p>
         </div>
         <div className="btm-sidebar">
           <Sidebar setSelectedLink={setSelectedLink} />

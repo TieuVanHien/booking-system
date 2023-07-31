@@ -13,20 +13,35 @@ const RegisterPage = () => {
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [validError, setValidError] = useState('');
 
   const { register } = useContext(AuthenticationContext);
 
-  const validateEmail = (email: any) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const validateInput = (email: string, username: string, password: string) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const usernamePattern = /^[a-zA-Z0-9_-]+$/;
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+
     try {
-      pattern.test(email);
+      if (!emailPattern.test(email)) {
+        setValidError('Please enter a valid email');
+      }
+      if (!usernamePattern.test(username)) {
+        setValidError('Please enter a valid username');
+      }
+      if (!passwordPattern.test(password)) {
+        setValidError(
+          'Password must be at least 8 characters long and contain at least 1 capital letter and 1 number'
+        );
+      }
+      return true;
     } catch (err) {
-      setEmailError('Please enter a valid email');
+      return 'Something went wrong';
     }
   };
+
   const handleSubmit = async (e: any) => {
-    validateEmail(e);
+    validateInput(username, email, password);
     e.preventDefault();
     if (password !== password2) {
       setError('Your password does not match');
@@ -128,7 +143,7 @@ const RegisterPage = () => {
             Create Account
           </button>
           {error && <p className="mt-2">{error}</p>}
-          {emailError && <p className="mt-4">{emailError}</p>}
+          {validError && <p className="mt-4">{validError}</p>}
           <span className="mt-4 text-xs">
             Already have an account?
             <Link href="/login" className="ml-1 text-yellow-500">
