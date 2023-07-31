@@ -56,53 +56,60 @@ const BookingHistory = () => {
 
   return (
     <section className="booking-history">
-      <h2>Booking History</h2>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell align="center">Service</TableCell>
-              <TableCell align="center">Duration</TableCell>
-              <TableCell align="center">Start</TableCell>
-              <TableCell align="center">End</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center"></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {allEvents.map((event) => (
-              <TableRow
-                key={event.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {event.title}
-                </TableCell>
-                <TableCell align="center">{event.service}</TableCell>
-                <TableCell align="center">{event.duration}</TableCell>
-                <TableCell align="center">
-                  {event.start.toLocaleString()}
-                </TableCell>
-                <TableCell align="center">
-                  {event.end.toLocaleString()}
-                </TableCell>
-                <TableCell>Status: {event.status}</TableCell>
-                <TableCell>
-                  {event.status === 'active' ? (
-                    <>
-                      <Button>Edit</Button>
-                      <Button>Cancel</Button>
-                    </>
-                  ) : (
-                    <Button>Cancel</Button>
-                  )}
-                </TableCell>
+      <h2 className="mt-8 mb-4">Booking History</h2>
+      <div className="p-8" style={{ height: '700px', overflow: 'auto' }}>
+        <TableContainer component={Paper}>
+          <Table sx={{ maxWidth: 1400 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Title</TableCell>
+                <TableCell align="center">Service</TableCell>
+                <TableCell align="center">Duration</TableCell>
+                <TableCell align="center">Start</TableCell>
+                <TableCell align="center">End</TableCell>
+                <TableCell align="center">Status</TableCell>
+                <TableCell align="center"></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {allEvents.map((event) => (
+                <TableRow
+                  key={event.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell
+                    className="ml-16"
+                    align="left"
+                    component="th"
+                    scope="row"
+                  >
+                    {event.title}
+                  </TableCell>
+                  <TableCell align="center">{event.service}</TableCell>
+                  <TableCell align="center">{event.duration}</TableCell>
+                  <TableCell align="center">
+                    {event.start.toLocaleString()}
+                  </TableCell>
+                  <TableCell align="center">
+                    {event.end.toLocaleString()}
+                  </TableCell>
+                  <TableCell align="center">Status: {event.status}</TableCell>
+                  <TableCell align="center">
+                    {event.status === 'active' ? (
+                      <>
+                        <Button>Edit</Button>
+                        <Button>Cancel</Button>
+                      </>
+                    ) : (
+                      <Button>Cancel</Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </section>
   );
 };
