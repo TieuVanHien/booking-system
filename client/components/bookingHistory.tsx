@@ -15,7 +15,6 @@ import {
 const BookingHistory = () => {
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
   const [user, setUser] = useState<UserProps | null>(null);
-  const [eventStatus, setEvenStatus] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
