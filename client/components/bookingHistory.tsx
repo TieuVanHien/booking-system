@@ -53,6 +53,16 @@ const BookingHistory = () => {
       fetchEvents();
     }
   }, [user]);
+  const cancelBooking = async (bookingId: number) => {
+    try {
+      await axios.post('/api/deleteBooking', { bookingId });
+      setAllEvents((prevEvents) =>
+        prevEvents.filter((event) => event.id !== bookingId)
+      );
+    } catch (error: any) {
+      console.error('Error cancelling booking:', error.message);
+    }
+  };
 
   return (
     <section className="booking-history">
@@ -112,11 +122,15 @@ const BookingHistory = () => {
                     {event.status === 'Active' ? (
                       <>
                         <Button>Edit</Button>
-                        <Button>Cancel</Button>
+                        <Button onClick={() => cancelBooking(event.id)}>
+                          Cancel
+                        </Button>
                       </>
                     ) : event.status == 'Upcoming' ? (
                       <>
-                        <Button>Cancel</Button>
+                        <Button onClick={() => cancelBooking(event.id)}>
+                          Cancel
+                        </Button>
                       </>
                     ) : (
                       'N/A'

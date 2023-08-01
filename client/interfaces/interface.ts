@@ -43,7 +43,7 @@ export interface Service {
 }
 
 export interface NewEvent {
-  id: string | null;
+  id: number;
   title: string;
   service: string | null;
   phone: string;

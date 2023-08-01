@@ -33,13 +33,14 @@ const services: Service[] = [
 
 const Booking = () => {
   const [event, setEvent] = useState<NewEvent>({
-    id: shortid.generate(),
+    id: 0,
     title: '',
     service: '',
     duration: 0,
     phone: '',
     start: new Date(),
-    end: new Date()
+    end: new Date(),
+    status: ''
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
   const [selectedService, setSelectedService] = useState<Service | null>();
@@ -97,13 +98,14 @@ const Booking = () => {
         };
         setAllEvents([...allEvents, newEvent]);
         setEvent({
-          id: shortid.generate(),
+          id: 0,
           title: '',
           service: '',
           duration: 0,
           phone: '',
           start: new Date(),
-          end: new Date()
+          end: new Date(),
+          status: ''
         });
         setSelectedService(null);
         console.log(userId);
