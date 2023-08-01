@@ -17,4 +17,5 @@ urlpatterns = [
     path('api/user/', views.UserAPIView.as_view(), name='login'),
     path('api/register/', views.RegisterUserAPIView.as_view(), name='register'),
     path('api/users/<int:user_id>/bookings/', views.UserBookingViewSet.as_view(), name='user-bookings'),
+    path('api/bookings/<int:pk>/delete/', views.BookingDeleteView.as_view(), name='booking_delete'),
 ]

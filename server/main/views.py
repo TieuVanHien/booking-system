@@ -1,4 +1,5 @@
-from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAPIView, DestroyAPIView
+from rest_framework import status
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.response import Response
@@ -90,4 +91,20 @@ class UserBookingViewSet(ListCreateAPIView):
     def perform_create(self, serializer):
         user_id = self.kwargs['user_id']
         serializer.save(user_id=user_id)
+
+class BookingDeleteView(DestroyAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def destroy(self, request, *args, **kwargs):
+        booking = self.get_object()
+
+        if booking.status == 'Inactive':
+            return Response({"message": "Booking is already inactive. Cannot delete."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Delete the booking from the database
+        booking.delete()
+
+        return Response({"message": "Booking successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
      
