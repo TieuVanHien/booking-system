@@ -6,7 +6,6 @@ import { Typography } from '@mui/material';
 import { ModalComponent } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
 import { UserProps } from '@/interfaces/interface';
-import shortid from 'shortid';
 import { CalendarComponent } from '@/components';
 import axios from 'axios';
 
@@ -177,6 +176,8 @@ const Booking = () => {
                 dateFormat="MMMM d, yyyy HH:mm"
                 timeCaption="Time"
                 minDate={new Date()}
+                minTime={new Date(0, 0, 0, 10, 0)}
+                maxTime={new Date(0, 0, 0, 18, 45)}
                 onChange={handleStartDateChange}
               />
               <select
