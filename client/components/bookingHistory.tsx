@@ -62,12 +62,24 @@ const BookingHistory = () => {
           <Table sx={{ maxWidth: 1400 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left">Title</TableCell>
-                <TableCell align="center">Service</TableCell>
-                <TableCell align="center">Duration</TableCell>
-                <TableCell align="center">Start</TableCell>
-                <TableCell align="center">End</TableCell>
-                <TableCell align="center">Status</TableCell>
+                <TableCell align="left">
+                  <h5>Title</h5>
+                </TableCell>
+                <TableCell align="center">
+                  <h5>Service</h5>
+                </TableCell>
+                <TableCell align="center">
+                  <h5>Duration</h5>
+                </TableCell>
+                <TableCell align="center">
+                  <h5>Start</h5>
+                </TableCell>
+                <TableCell align="center">
+                  <h5>End</h5>
+                </TableCell>
+                <TableCell align="center">
+                  <h5>Status</h5>
+                </TableCell>
                 <TableCell align="center"></TableCell>
               </TableRow>
             </TableHead>
@@ -97,7 +109,7 @@ const BookingHistory = () => {
                     <h5>{event.status}</h5>
                   </TableCell>
                   <TableCell align="center">
-                    {event.status === 'active' ? (
+                    {event.status === 'Active' ? (
                       <>
                         <Button>Edit</Button>
                         <Button>Cancel</Button>

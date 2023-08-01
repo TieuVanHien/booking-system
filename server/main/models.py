@@ -20,10 +20,10 @@ class Booking(models.Model):
         two_hours_before_event = event_start_mdt - timedelta(hours=2)
         thirty_mins_before_event = event_start_mdt - timedelta(minutes=30)
 
-        if current_date >= thirty_mins_before_event:
-            self.status = 'Upcoming'
-        elif current_date >= two_hours_before_event:
+        if current_date >= event_start_mdt:
             self.status = 'Inactive'
+        elif current_date >= thirty_mins_before_event:
+            self.status = 'Upcoming'
         else:
             self.status = 'Active'
         
