@@ -12,13 +12,12 @@ class Booking(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     phone = models.CharField(max_length=17, blank=True, null=True)
-    status = models.CharField(max_length=10, blank=True, null=True)  # Add the status field
+    status = models.CharField(max_length=10, blank=True, null=True) 
 
     def save(self, *args, **kwargs):
         calgary_tz = timezone('America/Edmonton')
         current_date = datetime.now(calgary_tz)
         event_start_mdt = self.start.astimezone(calgary_tz)
-        # two_hours_before_event = event_start_mdt - timedelta(hours=2)
         thirty_mins_before_event = event_start_mdt - timedelta(minutes=30)
 
         if current_date >= event_start_mdt:
@@ -29,11 +28,10 @@ class Booking(models.Model):
             self.status = 'Active'
         
         super(Booking, self).save(*args, **kwargs)
-    @background(schedule=60)  # Run every minute (adjust as needed)
+    @background(schedule=60)  
     def update_event_statuses():
         calgary_tz = timezone('America/Edmonton')
         current_date = datetime.now(calgary_tz)
-
         for event in Booking.objects.all():
             event_start_mdt = event.start.astimezone(calgary_tz)
             thirty_mins_before_event = event_start_mdt - timedelta(minutes=30)

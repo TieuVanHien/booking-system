@@ -22,7 +22,7 @@ class BookingSerializer(serializers.HyperlinkedModelSerializer):
         model = Booking
         fields = ['url','id', 'title','phone','service','status', 'duration', 'start', 'end', 'user']
         lookup_field = 'id'
-        
+
 class UserSerializer(serializers.ModelSerializer):
     is_staff = serializers.BooleanField()
     bookings = BookingSerializer(many=True, read_only=True)
