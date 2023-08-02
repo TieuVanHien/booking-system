@@ -107,4 +107,12 @@ class BookingDeleteView(DestroyAPIView):
 class BookingUpdateView(UpdateAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [permissions.IsAuthenticated]     
+    permission_classes = [permissions.IsAuthenticated]    
+    
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        serializer_data = serializer.validated_data
+        instance.start = serializer_data.get('start', instance.start)
+        instance.service = serializer_data.get('service', instance.service)
+
+        instance.save() 
