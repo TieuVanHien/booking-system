@@ -123,6 +123,8 @@ const Booking = () => {
         } catch (error) {
           console.log('Error adding booking:', error);
         }
+      } else {
+        setError('Please enter all booking details');
       }
     }
   };
@@ -158,6 +160,7 @@ const Booking = () => {
               <input
                 type="text"
                 placeholder="Add Title"
+                required
                 value={event.title}
                 onChange={(e) => setEvent({ ...event, title: e.target.value })}
               />
@@ -165,6 +168,7 @@ const Booking = () => {
                 type="text"
                 placeholder="Enter your phone number"
                 value={event.phone}
+                required
                 onChange={(e) => handlePhoneNumberChange(e.target.value)}
               />
               <DatePicker
@@ -181,6 +185,7 @@ const Booking = () => {
                 onChange={handleStartDateChange}
               />
               <select
+                required
                 value={selectedService?.id || 0}
                 onChange={(e) => handleServiceChange(Number(e.target.value))}
               >

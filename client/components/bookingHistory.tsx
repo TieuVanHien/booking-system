@@ -11,11 +11,19 @@ import {
   TableContainer,
   Paper
 } from '@mui/material';
+import { BookingUpdateComponent } from '@/components';
 
 const BookingHistory = () => {
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
   const [user, setUser] = useState<UserProps | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [currentBookingId, setCurrentBookingId] = useState<number | null>(null);
 
+  const handleOpenModal = async (bookingId: number) => {
+    setOpenModal(true);
+    setCurrentBookingId(bookingId);
+    console.log(`Booking :${bookingId}`);
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -120,7 +128,9 @@ const BookingHistory = () => {
                   <TableCell align="center">
                     {event.status === 'Active' ? (
                       <>
-                        <Button>Edit</Button>
+                        <Button onClick={() => handleOpenModal(event.id)}>
+                          Edit
+                        </Button>
                         <Button onClick={() => cancelBooking(event.id)}>
                           Cancel
                         </Button>
@@ -140,6 +150,13 @@ const BookingHistory = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        {openModal && (
+          <BookingUpdateComponent
+            bookingId={currentBookingId}
+            openModal={openModal}
+            onClose={() => setOpenModal(false)}
+          />
+        )}
       </div>
     </section>
   );
