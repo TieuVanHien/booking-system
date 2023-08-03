@@ -43,8 +43,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
         body,
         config
       );
-      console.log(accessResponse);
-      console.log(accessResponse.user.is_staff);
       if (accessResponse && accessResponse.user) {
         setUser(accessResponse.user);
       }
@@ -57,8 +55,8 @@ export const AuthenticationProvider = ({ children }: Props) => {
       } else {
         router.push('/user');
       }
-    } catch (err: any) {
-      console.log(err);
+    } catch (error: any) {
+      throw { statusCode: 401, message: 'Invalid username or password' };
     }
   };
   const register = async (

@@ -10,14 +10,18 @@ import { AuthenticationContext } from '@/context/authentication';
 const Login = () => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
   const [loginError, setLoginError] = useState('');
 
   const { login } = useContext(AuthenticationContext);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    login(username, password);
+    try {
+      await login(username, password);
+    } catch (err: any) {
+      setLoginError('Invalid username or password');
+      console.error('An error occurred during login:', err);
+    }
   };
 
   return (
@@ -31,62 +35,65 @@ const Login = () => {
             alt="Picture of the author"
           />
         </div>
-        <form
-          method="POST"
-          className="right flex flex-col items-center"
-          onSubmit={handleLogin}
-        >
-          <h3 className="mb-8">Sign In To Your Account</h3>
-          <div className="form">
-            <div className="flex flex-col">
-              <label className="mb-1">Username:</label>
-              <input
-                type="text"
-                className="text-black"
-                value={username}
-                onChange={(e) => setUserName(e.target.value)}
-                placeholder="Enter Your Username"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1">Password:</label>
-              <input
-                type="password"
-                className="text-black"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter Your Password"
-              />
-            </div>
-          </div>
-          <button
-            className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18"
-            type="submit"
+        <div className="right flex flex-col justify-center items-center">
+          <form
+            className="flex flex-col justify-center items-center"
+            method="POST"
+            onSubmit={handleLogin}
           >
-            Sign In
-          </button>
-          {loginError && <p className="mt-4">{loginError}</p>}
-          <div
-            className="mt-4
-           text-xs flex justify-around items-center"
-          >
-            <span className="mt-4 mr-16">
-              <Link
-                href="/register"
-                className="ml-1 text-yellow-500 hover:text-yellow-700"
-              >
-                Sign Up{' '}
-              </Link>
-              For New Account
-            </span>
-            <Link
-              className="mt-4 ml-12 hover:text-yellow-500"
-              href="/forgotpassword"
+            <h3 className="mb-8">Sign In To Your Account</h3>
+            <div className="form">
+              <div className="flex flex-col">
+                <label className="mb-1">Username:</label>
+                <input
+                  type="text"
+                  className="text-black"
+                  value={username}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="Enter Your Username"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="mb-1">Password:</label>
+                <input
+                  type="password"
+                  className="text-black"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Your Password"
+                />
+              </div>
+            </div>
+            <button
+              className="button bg-yellow-300 hover:bg-yellow-300 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-yellow-500 rounded mt-18"
+              type="submit"
             >
-              Forgot Password?
-            </Link>
-          </div>
-        </form>
+              Sign In
+            </button>
+
+            <div
+              className="mt-4
+           text-xs flex justify-around items-center"
+            >
+              <span className="mt-4 mr-16">
+                <Link
+                  href="/register"
+                  className="ml-1 text-yellow-500 hover:text-yellow-700"
+                >
+                  Sign Up{' '}
+                </Link>
+                For New Account
+              </span>
+              <Link
+                className="mt-4 ml-12 hover:text-yellow-500"
+                href="/forgotpassword"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+          </form>
+          {loginError && <p className="mt-8 font-semibold">{loginError}</p>}
+        </div>
       </div>
     </section>
   );

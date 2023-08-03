@@ -37,7 +37,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             sameSite: 'strict'
           })
         );
-      } catch (error) {
+        res.status(200).json({ message: 'Login successful' });
+      } catch (error: any) {
+        res.status(401).json({ message: 'Invalid username or password' });
         console.log('Error occured', error);
       }
       if (accessToken) {
@@ -53,12 +55,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           );
           res.status(200).json({ user: userData, access: accessToken });
         } catch (err) {
+          res.status(401).json({ message: 'Invalid username or password' });
           console.error('User data retrieval error:', err);
         }
       }
     } catch (err) {
       console.error('Login API error:', err);
-      return res.status(500).json({ message: 'Login Failed' });
+      return res.status(401).json({ message: 'Login Failed' });
     }
   }
 };
