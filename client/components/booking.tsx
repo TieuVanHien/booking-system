@@ -13,20 +13,17 @@ const services: Service[] = [
   {
     id: 1,
     name: 'Hand Service',
-    duration: 60,
-    serviceId: null
+    duration: 60
   },
   {
     id: 2,
     name: 'Feet Service',
-    duration: 30,
-    serviceId: null
+    duration: 30
   },
   {
     id: 3,
     name: 'Other Service',
-    duration: 45,
-    serviceId: null
+    duration: 45
   }
 ];
 

@@ -37,9 +37,8 @@ export interface Props {
 
 export interface Service {
   id: number;
-  name: string | null;
-  duration: number | null;
-  serviceId: number | null;
+  name: string;
+  duration: number;
 }
 
 export interface NewEvent {
