@@ -1,10 +1,14 @@
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework import status
+from rest_framework.views import APIView
 from django.contrib.auth.models import User, Group 
 from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.response import Response
 from .models import Booking
 from main.serializers import UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer, BookingSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('is_staff')
@@ -107,12 +111,8 @@ class BookingDeleteView(DestroyAPIView):
 class BookingUpdateView(UpdateAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [permissions.IsAuthenticated]    
-    
-    def perform_update(self, serializer):
-        instance = serializer.instance
-        serializer_data = serializer.validated_data
-        instance.start = serializer_data.get('start', instance.start)
-        instance.service = serializer_data.get('service', instance.service)
-
-        instance.save() 
+    permission_classes = [permissions.IsAuthenticated]   
+    partial = True 
+    def patch(self, request, *args, **kwargs):
+        print("Request Data:", request.data)
+        return self.partial_update(request, *args, **kwargs)

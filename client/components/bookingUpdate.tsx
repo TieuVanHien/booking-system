@@ -1,56 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Service } from '@/interfaces/interface';
 import { Typography } from '@mui/material';
 import { ModalComponent } from '@/components/index';
+import { Service } from '@/interfaces/interface';
+import { format } from 'date-fns';
 
 const services: Service[] = [
   {
     id: 1,
     name: 'Hand Service',
-    duration: 60,
-    serviceId: null
+    duration: 60
   },
   {
     id: 2,
     name: 'Feet Service',
-    duration: 30,
-    serviceId: null
+    duration: 30
   },
   {
     id: 3,
     name: 'Other Service',
-    duration: 45,
-    serviceId: null
+    duration: 45
   }
 ];
 const BookingUpdateComponent = ({ openModal, onClose, bookingId }: any) => {
   const [startDate, setStartDate] = useState(new Date());
-  const [selectedService, setSelectedService] = useState<Service | null>();
-
+  const [title, setTitle] = useState('');
+  const [selectedService, setSelectedService] = useState<Service>();
+  const phone = '15879175931';
+  const status = 'Active';
   const handleStartDateChange = (date: Date) => {
     setStartDate(date);
   };
-
   const handleServiceChange = (serviceId: number) => {
     const service = services.find((e) => e.id === serviceId);
-    setSelectedService(service || null);
+    setSelectedService(service);
   };
-
   const handleUpdateBooking = async () => {
-    try {
-      const data = {
-        start: startDate,
-        service: selectedService,
+    if (selectedService && startDate && title) {
+      console.log('clicked');
+      const formattedStartDate = format(startDate, 'dd MMMM yyyy HH:mm');
+      const endDate = new Date(startDate);
+      endDate.setMinutes(startDate.getMinutes() + selectedService.duration);
+      const formattedEndDate = format(endDate, 'dd MMMM yyyy HH:mm');
+      const updatedData = {
+        title: title,
+        start: formattedStartDate,
+        service: selectedService?.name,
+        duration: selectedService?.duration,
+        end: formattedEndDate,
+        phone: phone,
+        status: status,
         id: bookingId
       };
-      console.log(data);
-      await axios.put(`/api/bookings/${bookingId}/update/`, data);
-      console.log(data);
-    } catch (error: any) {
-      console.error('Error updating booking:', error.message);
+      const data = {
+        ...updatedData
+      };
+      try {
+        console.log('triggered', data);
+        await axios.post('/api/update', data);
+      } catch (error: any) {
+        console.error('Error updating booking:', error.message);
+      }
     }
   };
 
@@ -59,6 +71,13 @@ const BookingUpdateComponent = ({ openModal, onClose, bookingId }: any) => {
       <ModalComponent open={openModal} onClose={onClose}>
         <div className="input-form flex flex-col justify-between">
           <Typography className="">
+            <input
+              type="text"
+              placeholder="New title"
+              value={title}
+              required
+              onChange={(e) => setTitle(e.target.value)}
+            />
             <DatePicker
               selected={startDate}
               onChange={handleStartDateChange}

@@ -39,7 +39,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             `http://127.0.0.1:8000/api/bookings/${bookingId}/delete/`,
             userConfig
           );
-
           return res.status(200).json(response.data);
         } catch (error: any) {
           console.error('Error deleting booking:', error.message);
