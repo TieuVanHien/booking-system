@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from pytz import timezone
 from datetime import datetime, timedelta
 from background_task import background
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,20 +29,13 @@ class Booking(models.Model):
         
         super(Booking, self).save(*args, **kwargs)
     
-    def __str__(self):
-        return self.title
-
-@receiver(post_save, sender=Booking)
-def update_booking_status(sender, instance, **kwargs):
-    instance.update_event_status()    
-    
-@background(schedule=60)  
-def update_event_statuses():
-    calgary_tz = timezone('America/Edmonton')
-    current_date = datetime.now(calgary_tz)
-    for event in Booking.objects.all():
-        event_start_mdt = event.start.astimezone(calgary_tz)
-        thirty_mins_before_event = event_start_mdt - timedelta(minutes=30)
+    @background(schedule=60)  
+    def update_event_statuses():
+        calgary_tz = timezone('America/Edmonton')
+        current_date = datetime.now(calgary_tz)
+        for event in Booking.objects.all():
+            event_start_mdt = event.start.astimezone(calgary_tz)
+            thirty_mins_before_event = event_start_mdt - timedelta(minutes=30)
 
         if current_date >= event_start_mdt:
             event.status = 'Inactive'
@@ -54,3 +45,7 @@ def update_event_statuses():
             event.status = 'Active'
 
         event.save()
+    def __str__(self):
+        return self.title
+
+

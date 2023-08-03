@@ -22,6 +22,7 @@ class BookingSerializer(serializers.HyperlinkedModelSerializer):
         model = Booking
         fields = ['url','id', 'title','phone','service','status', 'duration', 'start', 'end', 'user']
         lookup_field = 'id'
+        partial = True
 
 class UserSerializer(serializers.ModelSerializer):
     is_staff = serializers.BooleanField()
