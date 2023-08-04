@@ -51,6 +51,11 @@ export interface NewEvent {
   start: Date;
   end: Date;
   status: string | null;
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  };
 }
 
 export interface Booking {

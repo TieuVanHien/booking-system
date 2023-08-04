@@ -40,21 +40,37 @@ const BookingHistory = () => {
   useEffect(() => {
     if (user) {
       const fetchEvents = async () => {
-        try {
-          const response = await axios.get('/api/events');
-          const eventsFromServer = response.data;
-          const filteredEvents = eventsFromServer.filter(
-            (event: any) => event.user?.id === user.id
-          );
-          const formattedEvents = filteredEvents.map((event: any) => ({
-            ...event,
-            start: new Date(event.start),
-            end: new Date(event.end)
-          }));
-          setAllEvents(formattedEvents);
-          console.log(formattedEvents);
-        } catch (error: any) {
-          console.error('Error fetching events:', error.message);
+        if (user.is_staff === true) {
+          try {
+            const response = await axios.get('/api/events');
+            const fetchedEvents = response.data;
+            const formattedEvents = fetchedEvents.map((event: any) => ({
+              ...event,
+              start: new Date(event.start),
+              end: new Date(event.end)
+            }));
+            setAllEvents(formattedEvents);
+            console.log(formattedEvents);
+          } catch (error) {
+            console.error('Error fetching events:', error);
+          }
+        } else {
+          try {
+            const response = await axios.get('/api/events');
+            const eventsFromServer = response.data;
+            const filteredEvents = eventsFromServer.filter(
+              (event: any) => event.user?.id === user.id
+            );
+            const formattedEvents = filteredEvents.map((event: any) => ({
+              ...event,
+              start: new Date(event.start),
+              end: new Date(event.end)
+            }));
+            setAllEvents(formattedEvents);
+            console.log(formattedEvents);
+          } catch (error: any) {
+            console.error('Error fetching events:', error.message);
+          }
         }
       };
       fetchEvents();
@@ -72,13 +88,28 @@ const BookingHistory = () => {
   };
 
   return (
-    <section className="booking-history">
-      <h2 className="mt-8 mb-4">Booking History</h2>
-      <div className="p-8" style={{ height: '700px', overflow: 'auto' }}>
+    <section className="booking-history flex flex-col justify-center items-center">
+      <h2 className="mt-4 mb-4">Booking History</h2>
+      <div
+        className="history-table flex justify-center"
+        style={{ height: '500px', overflow: 'auto' }}
+      >
         <TableContainer component={Paper}>
-          <Table sx={{ maxWidth: 1400 }} aria-label="simple table">
+          <Table sx={{ maxWidth: 1400, border: '0.1px solid #888' }}>
             <TableHead>
               <TableRow>
+                {user?.is_staff === true ? (
+                  <>
+                    <TableCell align="center">
+                      <h5>First Name</h5>
+                    </TableCell>
+                    <TableCell align="center">
+                      <h5>Last Name</h5>
+                    </TableCell>
+                  </>
+                ) : (
+                  ''
+                )}
                 <TableCell align="left">
                   <h5>Title</h5>
                 </TableCell>
@@ -106,6 +137,18 @@ const BookingHistory = () => {
                   key={event.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
+                  {user?.is_staff === true ? (
+                    <>
+                      <TableCell align="center">
+                        <h5> {event?.user.first_name}</h5>
+                      </TableCell>
+                      <TableCell align="center">
+                        <h5> {event?.user.last_name}</h5>
+                      </TableCell>
+                    </>
+                  ) : (
+                    ''
+                  )}
                   <TableCell
                     className="ml-16"
                     align="left"

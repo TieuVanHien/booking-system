@@ -10,7 +10,7 @@ const Admin = () => {
     switch (selectedLink) {
       case 'overview':
         return <CalendarComponent />;
-      case 'bookinghistory':
+      case 'history':
         return <BookingHistory />;
       default:
         return null;

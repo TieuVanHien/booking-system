@@ -60,9 +60,7 @@ const User = () => {
           Sign Out
         </a>
       </div>
-      <div className="right">
-        <div>{renderContent()}</div>
-      </div>
+      <div className="right">{renderContent()}</div>
     </section>
   );
 };
