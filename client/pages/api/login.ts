@@ -27,37 +27,43 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           config
         );
         accessToken = accessResponse.access;
-        res.setHeader(
-          'Set-Cookie',
-          cookie.serialize('refresh', accessResponse.refresh, {
-            httpOnly: true,
-            secure: true,
-            maxAge: 60 * 60 * 24,
-            path: '/',
-            sameSite: 'strict'
-          })
-        );
-        res.status(200).json({ message: 'Login successful' });
-      } catch (error: any) {
-        res.status(401).json({ message: 'Invalid username or password' });
-        console.log('Error occured', error);
-      }
-      if (accessToken) {
-        const userConfig = {
-          headers: {
-            Authorization: 'Bearer ' + accessToken
+        if (accessToken) {
+          if (accessResponse) {
+            res.setHeader(
+              'Set-Cookie',
+              cookie.serialize('refresh', accessResponse.refresh, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 60 * 60 * 24,
+                path: '/',
+                sameSite: 'strict'
+              })
+            );
           }
-        };
-        try {
-          const { data: userData } = await axios.get(
-            'http://127.0.0.1:8000/api/user/',
-            userConfig
-          );
-          res.status(200).json({ user: userData, access: accessToken });
-        } catch (err) {
-          res.status(401).json({ message: 'Invalid username or password' });
-          console.error('User data retrieval error:', err);
+          const userConfig = {
+            headers: {
+              Authorization: 'Bearer ' + accessToken
+            }
+          };
+          try {
+            const { data: userData } = await axios.get(
+              'http://127.0.0.1:8000/api/user/',
+              userConfig
+            );
+            res.status(200).json({
+              message: 'Login successful',
+              user: userData,
+              access: accessToken
+            });
+          } catch (err) {
+            res
+              .status(401)
+              .json({ message: 'Error retrieving user information' });
+            console.error('User data retrieval error:', err);
+          }
         }
+      } catch (error: any) {
+        console.log('Error occured', error);
       }
     } catch (err) {
       console.error('Login API error:', err);
