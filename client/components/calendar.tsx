@@ -8,16 +8,16 @@ import moment from 'moment';
 
 const locales = { 'en-US': require('date-fns/locale/en-US') };
 const localizer = dateFnsLocalizer({
-  format,
   parse,
   startOfWeek,
+  format,
   getDay,
   locales
 });
 
 const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => {
-  const start = format(event.start, 'dd MMMM yyyy HH:mm');
-  const end = format(event.end, 'dd MMMM yyyy HH:mm');
+  const start = event.start;
+  const end = event.end;
 
   return (
     <div className="flex flex-col">
@@ -54,22 +54,37 @@ const CalendarComponent = () => {
   useEffect(() => {
     if (user) {
       const fetchEvents = async () => {
-        try {
-          const response = await axios.get('/api/events');
-          const eventsFromServer = response.data;
-          const filteredEvents = eventsFromServer.filter(
-            (event: any) => event.user?.id === user.id
-          );
-
-          const formattedEvents = filteredEvents.map((event: any) => ({
-            ...event,
-            start: new Date(event.start),
-            end: new Date(event.end)
-          }));
-
-          setAllEvents(formattedEvents);
-        } catch (error: any) {
-          console.error('Error fetching events:', error.message);
+        if (user.is_staff === true) {
+          try {
+            const response = await axios.get('/api/events');
+            const fetchedEvents = response.data;
+            const formattedEvents = fetchedEvents.map((event: any) => ({
+              ...event,
+              start: new Date(event.start),
+              end: new Date(event.end)
+            }));
+            setAllEvents(formattedEvents);
+            console.log(formattedEvents);
+          } catch (error) {
+            console.error('Error fetching events:', error);
+          }
+        }
+        if (user.is_staff === false) {
+          try {
+            const response = await axios.get('/api/events');
+            const eventsFromServer = response.data;
+            const filteredEvents = eventsFromServer.filter(
+              (event: any) => event.user?.id === user.id
+            );
+            const formattedEvents = filteredEvents.map((event: any) => ({
+              ...event,
+              start: new Date(event.start),
+              end: new Date(event.end)
+            }));
+            setAllEvents(formattedEvents);
+          } catch (error: any) {
+            console.error('Error fetching events:', error.message);
+          }
         }
       };
       fetchEvents();

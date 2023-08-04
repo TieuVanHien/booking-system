@@ -174,7 +174,7 @@ const Booking = () => {
                 showTimeSelect
                 timeFormat="HH:mm"
                 timeIntervals={15}
-                dateFormat="MMMM d, yyyy HH:mm"
+                dateFormat="dd MMMMM yyyy HH:mm"
                 timeCaption="Time"
                 minDate={new Date()}
                 minTime={new Date(0, 0, 0, 10, 0)}
