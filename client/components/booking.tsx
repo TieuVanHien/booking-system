@@ -36,6 +36,11 @@ const Booking = () => {
     phone: '',
     start: new Date(),
     end: new Date(),
+    user: {
+      id: 1,
+      first_name: '',
+      last_name: ''
+    },
     status: ''
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
@@ -101,6 +106,11 @@ const Booking = () => {
           phone: '',
           start: new Date(),
           end: new Date(),
+          user: {
+            id: 1,
+            first_name: '',
+            last_name: ''
+          },
           status: ''
         });
         setSelectedService(null);
