@@ -41,9 +41,7 @@ class Booking(models.Model):
             event.status = 'Inactive'
         elif current_date >= thirty_mins_before_event:
             event.status = 'Upcoming'
-        else:
-            event.status = 'Active'
-
+   
         event.save()
     def __str__(self):
         return self.title

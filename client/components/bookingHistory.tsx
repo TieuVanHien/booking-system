@@ -169,7 +169,7 @@ const BookingHistory = () => {
                     <h5>{event.status}</h5>
                   </TableCell>
                   <TableCell align="center">
-                    {event.status === 'Active' ? (
+                    {event.status === 'Upcoming' && user?.is_staff == true ? (
                       <>
                         <Button onClick={() => handleOpenModal(event.id)}>
                           Edit

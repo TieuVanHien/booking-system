@@ -91,6 +91,7 @@ const RegisterPage = () => {
                 type="text"
                 className="text-black"
                 value={firstname}
+                required
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Enter your username"
               />
@@ -101,6 +102,7 @@ const RegisterPage = () => {
                 type="text"
                 className="text-black"
                 value={lastname}
+                required
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Enter your username"
               />
