@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NewEvent, UserProps } from '@/interfaces/interface';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import {
   Button,
@@ -18,6 +20,7 @@ const BookingHistory = () => {
   const [user, setUser] = useState<UserProps | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [currentBookingId, setCurrentBookingId] = useState<number | null>(null);
+  const [filteredDate, setFilterDate] = useState<Date | null>(new Date());
 
   const handleOpenModal = async (bookingId: number) => {
     setOpenModal(true);
@@ -49,8 +52,16 @@ const BookingHistory = () => {
               start: new Date(event.start),
               end: new Date(event.end)
             }));
-            setAllEvents(formattedEvents);
-            console.log(formattedEvents);
+            let filteredEvents = formattedEvents;
+            if (filteredDate) {
+              filteredEvents = formattedEvents.filter(
+                (event: any) =>
+                  new Date(event.start).toLocaleDateString() ===
+                  filteredDate.toLocaleDateString()
+              );
+            }
+            setAllEvents(filteredEvents);
+            console.log(filteredEvents);
           } catch (error) {
             console.error('Error fetching events:', error);
           }
@@ -66,8 +77,16 @@ const BookingHistory = () => {
               start: new Date(event.start),
               end: new Date(event.end)
             }));
-            setAllEvents(formattedEvents);
-            console.log(formattedEvents);
+            let filteredEventWithDate = formattedEvents;
+            if (filteredDate) {
+              filteredEventWithDate = formattedEvents.filter(
+                (event: any) =>
+                  new Date(event.start).toLocaleDateString() ===
+                  filteredDate.toLocaleDateString()
+              );
+            }
+            setAllEvents(filteredEventWithDate);
+            console.log(filteredEventWithDate);
           } catch (error: any) {
             console.error('Error fetching events:', error.message);
           }
@@ -75,7 +94,7 @@ const BookingHistory = () => {
       };
       fetchEvents();
     }
-  }, [user]);
+  }, [user, filteredDate]);
   const cancelBooking = async (bookingId: number) => {
     try {
       await axios.post('/api/deleteBooking', { bookingId });
@@ -89,7 +108,17 @@ const BookingHistory = () => {
 
   return (
     <section className="booking-history flex flex-col justify-center items-center">
-      <h2 className="mt-4 mb-4">Booking History</h2>
+      <div className="flex justify-center items center">
+        <h2 className="mt-4 mb-4">Booking History</h2>
+        <div className="flex justify-center items-center ml-6">
+          <DatePicker
+            selected={filteredDate}
+            onChange={(date: Date | null) => setFilterDate(date)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select a date"
+          />
+        </div>
+      </div>
       <div
         className="history-table flex justify-center"
         style={{ height: '500px', overflow: 'auto' }}
