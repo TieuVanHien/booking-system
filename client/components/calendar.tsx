@@ -91,7 +91,7 @@ const CalendarComponent = () => {
     }
   }, [user]);
   return (
-    <section className="">
+    <section className="booking flex flex-col justify-center items-center">
       <h3>Calendar</h3>
       <div className="calendar">
         <Calendar
