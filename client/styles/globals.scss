@@ -3,6 +3,8 @@
 @use './register.scss';
 @use './booking.scss';
 @use './bookingForm.scss';
+@use './home.scss';
+@use './nav.scss';
 @use './bookingHistory.scss';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -49,6 +51,10 @@ body {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
   }
+}
+a {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1em;
 }
 
 h1 {

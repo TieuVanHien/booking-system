@@ -6,6 +6,7 @@ import ModalComponent from './modal';
 import CalendarComponent from './calendar';
 import BookingUpdateComponent from './bookingUpdate';
 import SidebarAdmin from './sidebarAdmin';
+import Nav from './nav';
 
 export {
   ModalComponent,
@@ -15,5 +16,6 @@ export {
   Sidebar,
   CalendarComponent,
   BookingUpdateComponent,
-  SidebarAdmin
+  SidebarAdmin,
+  Nav
 };

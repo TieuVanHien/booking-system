@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
+import { Nav } from '@/components';
 
 const HomePage = () => {
   return (
-    <div className="">
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
+    <div className="home">
+      <Nav />
     </div>
   );
 };
