@@ -17,7 +17,7 @@ const Nav = () => {
         <Link className="link mr-4" href="/login">
           Login
         </Link>
-        <Link className="link" href="/register">
+        <Link className="link register-link" href="/register">
           Register
         </Link>
       </div>
