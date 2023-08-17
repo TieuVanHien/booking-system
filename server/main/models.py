@@ -11,6 +11,7 @@ class Booking(models.Model):
     duration = models.CharField(max_length=255)
     start = models.DateTimeField()
     end = models.DateTimeField()
+    staff = models.CharField(max_length=225, null=True)
     phone = models.CharField(max_length=17, blank=True, null=True)
     status = models.CharField(max_length=10, blank=True, null=True) 
 
