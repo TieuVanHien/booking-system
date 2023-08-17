@@ -7,7 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Invalid Method' });
   }
   if (req.method == 'POST') {
-    const { title, service, duration, start, phone, end } = req.body;
+    const { title, service, duration, start, staff, phone, end } = req.body;
     if (!req.headers.cookie) {
       return res.status(403).json({ message: 'Unauthorized' });
     }
@@ -37,9 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           'http://127.0.0.1:8000/api/user/',
           userConfig
         );
-
         res.status(200).json({ user: userData, access: userData.access });
-        const userId = userData.id;
         try {
           const accessToken = data.access;
           const config = {
@@ -54,19 +52,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             service,
             duration,
             phone,
+            staff,
             start,
             end
           };
           try {
             const response = await axios.post(
-              `http://127.0.0.1:8000/api/users/${userId}/bookings/`,
+              `http://127.0.0.1:8000/api/users/${userData.id}/bookings/`,
               body,
               config
             );
             console.log(response.data);
             return res.status(201).json(response.data);
           } catch (error: any) {
-            console.error('Error creating booking:', error.message);
+            return res.status(400).json('Something went wrong');
           }
         } catch (error: any) {
           console.log(error.message);
