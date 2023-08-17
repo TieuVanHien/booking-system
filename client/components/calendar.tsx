@@ -24,6 +24,7 @@ const EventComponent: React.FC<{ event: NewEvent }> = ({ event }) => {
       <p>Title: {event.title}</p>
       <p>Request Service: {event.service}</p>
       <p>Phone: {event.phone}</p>
+      <p>Staff: {event.staff}</p>
       {start && end && (
         <>
           {moment(start).format('MMMM D, YYYY hh:mm a')} -{' '}

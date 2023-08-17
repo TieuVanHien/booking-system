@@ -41,6 +41,7 @@ const Booking = () => {
       first_name: '',
       last_name: ''
     },
+    staff: '',
     status: ''
   });
   const [allEvents, setAllEvents] = useState<NewEvent[]>([]);
@@ -48,6 +49,7 @@ const Booking = () => {
   const [openModal, setOpenModal] = useState(false);
   const [user, setUserData] = useState<UserProps | null>(null);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [staff, setStaff] = useState('');
   const [error, setError] = useState('');
   const { accessToken } = useContext(AuthenticationContext);
   const phoneRegex =
@@ -73,7 +75,9 @@ const Booking = () => {
     setEvent({ ...event, phone: value });
     setIsPhoneValid(phoneRegex.test(value));
   };
-
+  const handleStaffSelection = (staff: string) => {
+    setEvent({ ...event, staff });
+  };
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (user) {
@@ -106,6 +110,7 @@ const Booking = () => {
           phone: '',
           start: new Date(),
           end: new Date(),
+          staff: '',
           user: {
             id: 1,
             first_name: '',
@@ -184,7 +189,7 @@ const Booking = () => {
                 showTimeSelect
                 timeFormat="HH:mm"
                 timeIntervals={15}
-                dateFormat="dd MMMMM yyyy HH:mm"
+                dateFormat="dd MMM yyyy HH:mm"
                 timeCaption="Time"
                 minDate={new Date()}
                 minTime={new Date(0, 0, 0, 10, 0)}
@@ -206,6 +211,18 @@ const Booking = () => {
               {selectedService && (
                 <div>Service Duration: {selectedService.duration} minutes</div>
               )}
+              <select
+                onChange={(e) => {
+                  handleStaffSelection(e.target.value);
+                }}
+              >
+                <option selected value="Anna">
+                  Anna
+                </option>
+                <option value="Bella">Bella</option>
+                <option value="Sue">Sue</option>
+                <option value="Michelle">Michelle</option>
+              </select>
               <button
                 className={`button ${
                   isPhoneValid

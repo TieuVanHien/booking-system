@@ -149,6 +149,9 @@ const BookingHistory = () => {
                   <h5>Duration</h5>
                 </TableCell>
                 <TableCell align="center">
+                  <h5>Staff</h5>
+                </TableCell>
+                <TableCell align="center">
                   <h5>Start</h5>
                 </TableCell>
                 <TableCell align="center">
@@ -188,6 +191,7 @@ const BookingHistory = () => {
                   </TableCell>
                   <TableCell align="center">{event.service}</TableCell>
                   <TableCell align="center">{event.duration}</TableCell>
+                  <TableCell align="center">{event.staff}</TableCell>
                   <TableCell align="center">
                     {event.start.toLocaleString()}
                   </TableCell>
@@ -202,6 +206,15 @@ const BookingHistory = () => {
                       <>
                         <Button onClick={() => handleOpenModal(event.id)}>
                           Edit
+                        </Button>
+                        <Button onClick={() => cancelBooking(event.id)}>
+                          Cancel
+                        </Button>
+                      </>
+                    ) : event.status === 'Active' ? (
+                      <>
+                        <Button onClick={() => handleOpenModal(event.id)}>
+                          Edit Request
                         </Button>
                         <Button onClick={() => cancelBooking(event.id)}>
                           Cancel

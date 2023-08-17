@@ -51,6 +51,7 @@ export interface NewEvent {
   start: Date;
   end: Date;
   status: string | null;
+  staff: string;
   user: {
     id: number;
     first_name: string;
