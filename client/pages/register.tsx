@@ -85,28 +85,31 @@ const RegisterPage = () => {
                 placeholder="Enter your username"
               />
             </div>
-            <div className="flex flex-col">
-              <label className="mb-1">First Name:</label>
-              <input
-                type="text"
-                className="text-black"
-                value={firstname}
-                required
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Enter your username"
-              />
+            <div className="flex">
+              <div className="flex flex-col">
+                <label className="mb-1">First Name:</label>
+                <input
+                  type="text"
+                  className="text-black  mr-4"
+                  value={firstname}
+                  required
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="Enter your username"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="mb-1">Last Name:</label>
+                <input
+                  type="text"
+                  className="text-black"
+                  value={lastname}
+                  required
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Enter your username"
+                />
+              </div>
             </div>
-            <div className="flex flex-col">
-              <label className="mb-1">Last Name:</label>
-              <input
-                type="text"
-                className="text-black"
-                value={lastname}
-                required
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Enter your username"
-              />
-            </div>
+
             <div className="flex flex-col">
               <label className="mb-1">Email:</label>
               <input
@@ -146,9 +149,9 @@ const RegisterPage = () => {
           </button>
           {error && <p className="mt-2">{error}</p>}
           {validError && <p className="mt-4">{validError}</p>}
-          <span className="mt-4 text-xs">
+          <span className="mt-4 text-s">
             Already have an account?
-            <Link href="/login" className="ml-1 text-yellow-500">
+            <Link href="/login" className="ml-1  text-yellow-500">
               Log in
             </Link>
           </span>
