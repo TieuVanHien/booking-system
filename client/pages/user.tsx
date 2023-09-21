@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { UserProps } from '@/interfaces/interface';
 import { Booking, Setting, BookingHistory, Sidebar } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
-import Image from 'next/image';
 
 const User = () => {
   const [selectedLink, setSelectedLink] = useState('overview');
@@ -25,7 +24,7 @@ const User = () => {
 
   const handleLogout = async (e: any) => {
     e.preventDefault();
-    await logout();
+    logout();
   };
 
   const renderContent = () => {
@@ -44,7 +43,6 @@ const User = () => {
     <section className="dashboard flex justify-center items-center">
       <div className="left flex flex-col justify-center items-center">
         <div className="top-sidebar">
-          <Image src="" alt="test" />
           <h3>@{user?.username}</h3>
           {user && (
             <h4>

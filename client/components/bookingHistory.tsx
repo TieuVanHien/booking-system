@@ -211,15 +211,6 @@ const BookingHistory = () => {
                           Cancel
                         </Button>
                       </>
-                    ) : event.status === 'Active' ? (
-                      <>
-                        <Button onClick={() => handleOpenModal(event.id)}>
-                          Edit Request
-                        </Button>
-                        <Button onClick={() => cancelBooking(event.id)}>
-                          Cancel
-                        </Button>
-                      </>
                     ) : event.status == 'Upcoming' ? (
                       <>
                         <Button onClick={() => cancelBooking(event.id)}>
