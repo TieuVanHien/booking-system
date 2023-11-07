@@ -21,20 +21,21 @@ const RegisterPage = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernamePattern = /^[a-zA-Z0-9_-]+$/;
     const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-
     try {
       if (!emailPattern.test(email)) {
         setValidError('Please enter a valid email');
+        return false;
       }
       if (!usernamePattern.test(username)) {
         setValidError('Please enter a valid username');
+        return false;
       }
       if (!passwordPattern.test(password)) {
         setValidError(
           'Password must be at least 8 characters long and contain at least 1 capital letter and 1 number'
         );
+        return false;
       }
-      return true;
     } catch (err) {
       return 'Something went wrong';
     }
