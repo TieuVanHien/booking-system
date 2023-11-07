@@ -18,9 +18,14 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(username, password);
-    } catch (err: any) {
-      setLoginError('Invalid username or password');
-      console.error('An error occurred during login:', err);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        console.error('An error occurred during login:', error);
+        setLoginError('Invalid username or password');
+      } else {
+        console.error('An error occurred during login:', error);
+        setLoginError('Something went wrong, please try again!');
+      }
     }
   };
 
