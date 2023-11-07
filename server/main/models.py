@@ -23,10 +23,8 @@ class Booking(models.Model):
 
         if current_date >= event_start_mdt:
             self.status = 'Inactive'
-        elif current_date >= thirty_mins_before_event:
-            self.status = 'Upcoming'
         else:
-            self.status = 'Active'
+            self.status = 'Upcoming'
         
         super(Booking, self).save(*args, **kwargs)
     
