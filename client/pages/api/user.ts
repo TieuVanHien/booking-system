@@ -38,7 +38,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(500).json({ message: 'Something went wrong' });
       }
     } catch (err) {
-      console.log(err);
+      res
+        .status(401)
+        .json({ message: 'Wrong username or password or invalid account' });
     }
   } else if (req.method === 'GET') {
     const { refresh } = req.cookies;
