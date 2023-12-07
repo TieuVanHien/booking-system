@@ -19,13 +19,8 @@ const Login = () => {
     try {
       await login(username, password);
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        console.error('An error occurred during login:', error);
-        setLoginError('Invalid username or password');
-      } else {
-        console.error('An error occurred during login:', error);
-        setLoginError('Something went wrong, please try again!');
-      }
+      console.error('An error occurred during login:', error);
+      setLoginError('Invalid username or password');
     }
   };
 
