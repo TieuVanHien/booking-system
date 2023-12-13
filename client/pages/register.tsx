@@ -2,7 +2,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
-import { loginImage } from '../public/images';
+import { loginImage } from '@/public/images';
 import Link from 'next/link';
 
 const RegisterPage = () => {
