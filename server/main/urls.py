@@ -24,4 +24,6 @@ urlpatterns = [
          views.BookingDeleteView.as_view(), name='booking_delete'),
     path('api/bookings/<int:pk>/update/',
          views.BookingUpdateView.as_view(), name='booking_update'),
+    path('api/forgotpassword/', views.ForgotPasswordView.as_view(),
+         name='forgot-password'),
 ]
