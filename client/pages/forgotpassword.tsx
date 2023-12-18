@@ -1,16 +1,23 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Image from 'next/image';
 import { loginImage } from '@/public/images';
 import Link from 'next/link';
+import { AuthenticationContext } from '@/context/authentication';
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState<string>('');
-
+  const { forgotPassword } = useContext(AuthenticationContext);
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    try {
+      await forgotPassword(email);
+      console.log('Password reset link was sent');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (

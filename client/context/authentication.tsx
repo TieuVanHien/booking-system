@@ -1,12 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import {
-  AuthContextType,
-  Props
-  // Booking,
-  // BookingContextType
-} from '@/interfaces/interface';
+import { AuthContextType, Props } from '@/interfaces/interface';
 
 export const AuthenticationContext = createContext<AuthContextType>({
   user: null,
@@ -15,7 +10,8 @@ export const AuthenticationContext = createContext<AuthContextType>({
   login: () => {},
   register: () => {},
   checkUserLogin: () => {},
-  logout: () => {}
+  logout: () => {},
+  forgotPassword: () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState(null);
@@ -105,13 +101,26 @@ export const AuthenticationProvider = ({ children }: Props) => {
       console.log(err);
     }
   };
+  const forgotPassword = async (email: string): Promise<void> => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/forgotpassword`,
+        { email }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  };
   const authContextValue: AuthContextType = {
     user,
     accessToken,
     error,
     login,
     register,
+    forgotPassword,
     checkUserLogin,
+
     logout
   };
   return (
