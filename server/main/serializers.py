@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Booking
+from .models import Booking, ForgotPassword
 
 
 class BookingHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
@@ -79,3 +79,7 @@ class AdminUserSerializer(serializers.HyperlinkedModelSerializer):
 
 class ForgotPasswordSerializer(serializers.HyperlinkedModelSerializer):
     email = serializers.EmailField()
+
+    class Meta:
+        model = ForgotPassword
+        fields = ['email']
