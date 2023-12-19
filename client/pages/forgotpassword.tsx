@@ -7,6 +7,8 @@ import Link from 'next/link';
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState<string>('');
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -19,13 +21,13 @@ const ForgotPasswordForm = () => {
         );
         return response.data;
       } catch (error: any) {
+        setError('Your email is not valid or users does not exist');
         throw error.response?.data || error.message;
       }
     };
     try {
-      console.log('Email:', email);
       await forgotPassword(email);
-      console.log('Password reset link was sent');
+      setSubmittedEmail(email);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -72,6 +74,10 @@ const ForgotPasswordForm = () => {
               Log in
             </Link>
           </span>
+          {submittedEmail && (
+            <p>Email submitted for password reset: {submittedEmail}</p>
+          )}
+          {error && <p>{error}</p>}
         </form>
       </div>
     </section>
