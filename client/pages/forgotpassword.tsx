@@ -1,18 +1,29 @@
 import React from 'react';
 import { useState, useContext } from 'react';
+import axios from 'axios';
 import Image from 'next/image';
 import { loginImage } from '@/public/images';
 import Link from 'next/link';
-import { AuthenticationContext } from '@/context/authentication';
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState<string>('');
-  const { forgotPassword } = useContext(AuthenticationContext);
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    const forgotPassword = async (email: string): Promise<void> => {
+      try {
+        const response = await axios.post(
+          `http://localhost:3000/api/forgotpassword`,
+          { email }
+        );
+        return response.data;
+      } catch (error: any) {
+        throw error.response?.data || error.message;
+      }
+    };
     try {
+      console.log('Email:', email);
       await forgotPassword(email);
       console.log('Password reset link was sent');
     } catch (error) {
