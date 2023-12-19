@@ -135,6 +135,8 @@ class BookingUpdateView(UpdateAPIView):
 
 
 class ForgotPasswordView(APIView):
+    permission_classes = [permissions.AllowAny]
+
     def post(self, request, *args, **kwargs):
         serializer = ForgotPasswordSerializer(data=request.data)
         if serializer.is_valid():
@@ -148,13 +150,11 @@ class ForgotPasswordView(APIView):
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
 
-            # Construct the password reset link
             reset_link = f"http://localhost:3000/resetpassword/{uidb64}/{token}/"
-
-            # Send the password reset email
             send_mail(
                 'Password Reset',
                 f'Click the following link to reset your password: {reset_link}',
+                'jvnailandspa@example.com',
                 [email],
                 fail_silently=False,
             )
