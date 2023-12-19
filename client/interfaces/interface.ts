@@ -31,7 +31,6 @@ export interface AuthContextType {
   ) => void;
   checkUserLogin: () => void;
   logout: () => void;
-  forgotPassword: (email: string) => void;
 }
 export interface Props {
   children?: ReactNode;

@@ -10,8 +10,7 @@ export const AuthenticationContext = createContext<AuthContextType>({
   login: () => {},
   register: () => {},
   checkUserLogin: () => {},
-  logout: () => {},
-  forgotPassword: () => {}
+  logout: () => {}
 });
 export const AuthenticationProvider = ({ children }: Props) => {
   const [user, setUser] = useState(null);
@@ -118,7 +117,6 @@ export const AuthenticationProvider = ({ children }: Props) => {
     error,
     login,
     register,
-    forgotPassword,
     checkUserLogin,
 
     logout
