@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { NextApiRequest, NextApiResponse } from 'next';
 import Image from 'next/image';
 import { loginImage } from '@/public/images';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-const ResetPassword = (req: NextApiRequest, res: NextApiResponse) => {
+const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
   const [validError, setValidError] = useState('');
   const router = useRouter();
   const { uidb64, token } = router.query;
-
+  useEffect(() => {
+    if (!uidb64 || !token) {
+      setError('Something went wrong');
+    }
+  }, [uidb64, token, router]);
+  if (!uidb64 || !token) {
+    router.push('/login');
+  }
   const validateInput = (password: string) => {
     const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
@@ -28,13 +34,6 @@ const ResetPassword = (req: NextApiRequest, res: NextApiResponse) => {
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    useEffect(() => {
-      if (!uidb64 || !token) {
-        router.push('/login');
-      }
-    }, [uidb64, token]);
-    console.log('uidb64:', uidb64);
-    console.log('token:', token);
     const validPassword = validateInput(newPassword);
     if (!validPassword) {
       setError('Your password does not match');
@@ -44,24 +43,18 @@ const ResetPassword = (req: NextApiRequest, res: NextApiResponse) => {
       setError('Your password does not match');
       return;
     }
-    if (req.method === 'POST') {
-      const { newPassword } = req.body;
-      try {
-        const response = await axios.post(
-          'http://127.0.0.1:8000/api/resetpassword',
-          {
-            uidb64,
-            token,
-            newPassword
-          }
-        );
-        console.log(response.data);
-        return res.status(200).json({ message: 'Password reset successful' });
-      } catch (error: any) {
-        console.error('Error:', error.response?.data || error.message);
-      }
-    } else {
-      return res.status(405).json({ error: 'Method not allowed' });
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/resetpassword',
+        {
+          uidb64,
+          token,
+          newPassword
+        }
+      );
+      console.log(response.data);
+    } catch (error: any) {
+      console.error('Error:', error.response?.data || error.message);
     }
   };
 
@@ -81,7 +74,7 @@ const ResetPassword = (req: NextApiRequest, res: NextApiResponse) => {
           className="right flex flex-col items-center"
           onSubmit={handleSubmit}
         >
-          <h3 className="mb-6">Create Your Free Account</h3>
+          <h3 className="mb-6">Reset Your Password</h3>
           <div className="form">
             <div className="flex flex-col">
               <label className="mb-1">Password:</label>
@@ -113,7 +106,7 @@ const ResetPassword = (req: NextApiRequest, res: NextApiResponse) => {
           {error && <p className="mt-2">{error}</p>}
           {validError && <p className="mt-4">{validError}</p>}
           <span className="mt-4 text-s">
-            Already have an account?
+            Go Back To Login Page?
             <Link href="/login" className="ml-1  text-yellow-500">
               Log in
             </Link>
