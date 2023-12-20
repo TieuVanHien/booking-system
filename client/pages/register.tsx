@@ -36,16 +36,21 @@ const RegisterPage = () => {
         );
         return false;
       }
+      return true;
     } catch (err) {
       return 'Something went wrong';
     }
   };
 
   const handleSubmit = async (e: any) => {
-    validateInput(username, email, password);
     e.preventDefault();
+    if (!validateInput(email, username, password)) {
+      return;
+    }
+
     if (password !== password2) {
       setError('Your password does not match');
+      return;
     }
     try {
       register(username, firstname, lastname, email, password);
