@@ -1,35 +1,67 @@
-'use client';
-import React, { useState, useContext } from 'react';
-import { AuthenticationContext } from '@/context/authentication';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { NextApiRequest, NextApiResponse } from 'next';
 import Image from 'next/image';
 import { loginImage } from '@/public/images';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-const ResetPassword = () => {
-  const [password, setPassword] = useState('');
+const ResetPassword = (req: NextApiRequest, res: NextApiResponse) => {
+  const [newPassword, setnewPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
   const [validError, setValidError] = useState('');
+  const router = useRouter();
+  const { uidb64, token } = router.query;
 
   const validateInput = (password: string) => {
     const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    try {
-      if (!passwordPattern.test(password)) {
-        setValidError(
-          'Password must be at least 8 characters long and contain at least 1 capital letter and 1 number'
-        );
-        return false;
-      }
-    } catch (err) {
-      return 'Something went wrong';
-    }
-  };
 
+    if (!passwordPattern.test(password)) {
+      setValidError(
+        'Password must be at least 8 characters long and contain at least 1 capital letter and 1 number'
+      );
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = async (e: any) => {
-    validateInput(password);
     e.preventDefault();
-    if (password !== password2) {
+    useEffect(() => {
+      if (!uidb64 || !token) {
+        router.push('/login');
+      }
+    }, [uidb64, token]);
+    console.log('uidb64:', uidb64);
+    console.log('token:', token);
+    const validPassword = validateInput(newPassword);
+    if (!validPassword) {
       setError('Your password does not match');
+      return;
+    }
+    if (newPassword !== password2) {
+      setError('Your password does not match');
+      return;
+    }
+    if (req.method === 'POST') {
+      const { newPassword } = req.body;
+      try {
+        const response = await axios.post(
+          'http://127.0.0.1:8000/api/resetpassword',
+          {
+            uidb64,
+            token,
+            newPassword
+          }
+        );
+        console.log(response.data);
+        return res.status(200).json({ message: 'Password reset successful' });
+      } catch (error: any) {
+        console.error('Error:', error.response?.data || error.message);
+      }
+    } else {
+      return res.status(405).json({ error: 'Method not allowed' });
     }
   };
 
@@ -56,9 +88,9 @@ const ResetPassword = () => {
               <input
                 type="password"
                 className="text-black"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your Password"
+                value={newPassword}
+                onChange={(e) => setnewPassword(e.target.value)}
+                placeholder="Enter Your New Password"
               />
             </div>
             <div className="flex flex-col">
