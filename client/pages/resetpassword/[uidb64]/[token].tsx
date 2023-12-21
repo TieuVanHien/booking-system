@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
   const [validError, setValidError] = useState('');
@@ -15,12 +16,13 @@ const ResetPassword = () => {
   const { uidb64, token } = router.query;
   useEffect(() => {
     if (!uidb64 || !token) {
-      setError('Something went wrong');
+      console.log('uidb64 and token are not found');
     }
   }, [uidb64, token, router]);
-  if (!uidb64 || !token) {
-    router.push('/login');
-  }
+  // if (!uidb64 || !token) {
+  //   router.push('/login');
+  // }
+  console.log('data:', uidb64, token);
   const validateInput = (password: string) => {
     const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
@@ -32,7 +34,9 @@ const ResetPassword = () => {
     }
     return true;
   };
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const validPassword = validateInput(newPassword);
     if (!validPassword) {
@@ -49,6 +53,7 @@ const ResetPassword = () => {
         {
           uidb64,
           token,
+          currentPassword,
           newPassword
         }
       );
@@ -76,6 +81,16 @@ const ResetPassword = () => {
         >
           <h3 className="mb-6">Reset Your Password</h3>
           <div className="form">
+            <div className="flex flex-col">
+              <label className="mb-1">Current Password:</label>
+              <input
+                type="password"
+                className="text-black"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Enter Your New Password"
+              />
+            </div>
             <div className="flex flex-col">
               <label className="mb-1">Password:</label>
               <input
