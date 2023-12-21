@@ -127,7 +127,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+PASSWORD_RESET_TIMEOUT_DAYS = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

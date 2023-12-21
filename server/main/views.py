@@ -1,6 +1,7 @@
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListCreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework import status
 from rest_framework.views import APIView
+from django.utils import timezone
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.response import Response
@@ -165,7 +166,9 @@ class ForgotPasswordView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ResetPassword (APIView):
+class ResetPassword(APIView):
+    permission_classes = [permissions.AllowAny]
+
     def post(self, request, *args, **kwargs):
         uidb64 = kwargs.get('uidb64')
         token = kwargs.get('token')
@@ -174,13 +177,23 @@ class ResetPassword (APIView):
         try:
             uid = force_text(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response({'error': 'User does not exist or Invalid reset link.'}, status=status.HTTP_404_NOT_FOUND)
-
-        if default_token_generator.check_token(user, token):
-            try:
+            logger.info(
+                f'UID: {uid}, Token: {token}, Current Time: {timezone.now()}, Registration Time: {user.date_joined}')
+            print("User:", user)
+            print("Token:", token)
+            print("uidb64:", uidb64)
+            print("Decoded UID:", uid)
+            print("Check Token Result:",
+                  default_token_generator.check_token(user, token))
+            if default_token_generator.check_token(user, token):
                 user.set_password(new_password)
                 user.save()
                 return Response({'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
-            except ValidationError as e:
-                return Response({'error': 'User does not exist or Invalid reset link.'}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response({'error': 'Invalid reset link.'}, status=status.HTTP_400_BAD_REQUEST)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({'error': 'Invalid user ID.'}, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            return Response({'error': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 
 const ResetPassword = () => {
   const [newPassword, setnewPassword] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
   const [validError, setValidError] = useState('');
@@ -19,17 +18,11 @@ const ResetPassword = () => {
       console.log('uidb64 and token are not found');
     }
   }, [uidb64, token, router]);
-  // if (!uidb64 || !token) {
-  //   router.push('/login');
-  // }
   console.log('data:', uidb64, token);
   const validateInput = (password: string) => {
     const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
     if (!passwordPattern.test(password)) {
-      setValidError(
-        'Password must be at least 8 characters long and contain at least 1 capital letter and 1 number'
-      );
       return false;
     }
     return true;
@@ -40,7 +33,9 @@ const ResetPassword = () => {
     e.preventDefault();
     const validPassword = validateInput(newPassword);
     if (!validPassword) {
-      setError('Your password does not match');
+      setError(
+        'Password must be at least 8 characters long and contain at least 1 capital letter and 1 number'
+      );
       return;
     }
     if (newPassword !== password2) {
@@ -49,15 +44,15 @@ const ResetPassword = () => {
     }
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/resetpassword',
+        `http://127.0.0.1:8000/api/resetpassword/${uidb64}/${token}/`,
         {
-          uidb64,
-          token,
-          currentPassword,
           newPassword
         }
       );
       console.log(response.data);
+      if (response.status === 200) {
+        router.push('/login');
+      }
     } catch (error: any) {
       console.error('Error:', error.response?.data || error.message);
     }
@@ -81,16 +76,6 @@ const ResetPassword = () => {
         >
           <h3 className="mb-6">Reset Your Password</h3>
           <div className="form">
-            <div className="flex flex-col">
-              <label className="mb-1">Current Password:</label>
-              <input
-                type="password"
-                className="text-black"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter Your New Password"
-              />
-            </div>
             <div className="flex flex-col">
               <label className="mb-1">Password:</label>
               <input
