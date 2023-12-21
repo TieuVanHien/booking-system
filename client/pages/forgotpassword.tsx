@@ -13,16 +13,26 @@ const ForgotPasswordForm = () => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const checkEmail = (email: string) => {
+      return pattern.test(email);
+    };
+
     const forgotPassword = async (email: string): Promise<void> => {
-      try {
-        const response = await axios.post(
-          `http://localhost:3000/api/forgotpassword`,
-          { email }
-        );
-        return response.data;
-      } catch (error: any) {
-        setError('Your email is not valid or users does not exist');
-        throw error.response?.data || error.message;
+      if (checkEmail(email)) {
+        try {
+          const response = await axios.post(
+            `http://localhost:3000/api/forgotpassword`,
+            { email }
+          );
+          return response.data;
+        } catch (error: any) {
+          setError('Your email is not valid or users does not exist');
+          throw error.response?.data || error.message;
+        }
+      } else {
+        setError('Please enter a valid email');
+        return;
       }
     };
     try {
