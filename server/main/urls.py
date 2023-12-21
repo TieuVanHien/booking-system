@@ -26,4 +26,6 @@ urlpatterns = [
          views.BookingUpdateView.as_view(), name='booking_update'),
     path('api/forgotpassword/', views.ForgotPasswordView.as_view(),
          name='forgot-password'),
+    path('api/resetpassword/<uidb64>/<token>/', views.ResetPassword.as_view(),
+         name='reset-password'),
 ]

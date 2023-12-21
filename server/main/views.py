@@ -6,8 +6,9 @@ from rest_framework import viewsets, permissions, serializers, status
 from rest_framework.response import Response
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from .models import Booking
 from main.serializers import ForgotPasswordSerializer, UserSerializer, GroupSerializer, RegisterUserSerializer, AdminUserSerializer, BookingSerializer
 import logging
@@ -162,3 +163,24 @@ class ForgotPasswordView(APIView):
             return Response({'message': 'Password reset link sent to your email.'}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResetPassword (APIView):
+    def post(self, request, *args, **kwargs):
+        uidb64 = kwargs.get('uidb64')
+        token = kwargs.get('token')
+        new_password = request.data.get('newPassword')
+
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({'error': 'User does not exist or Invalid reset link.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if default_token_generator.check_token(user, token):
+            try:
+                user.set_password(new_password)
+                user.save()
+                return Response({'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
+            except ValidationError as e:
+                return Response({'error': 'User does not exist or Invalid reset link.'}, status=status.HTTP_404_NOT_FOUND)
