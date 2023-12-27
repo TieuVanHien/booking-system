@@ -7,6 +7,7 @@ import { ModalComponent } from '@/components/index';
 import { AuthenticationContext } from '@/context/authentication';
 import { UserProps } from '@/interfaces/interface';
 import { CalendarComponent } from '@/components';
+import { useNotification } from './notification';
 import axios from 'axios';
 
 const services: Service[] = [
@@ -54,7 +55,7 @@ const Booking = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const phoneRegex =
     /^\+?\d{1,3}?[-.\s]?\(?\d{2,3}\)?[-.\s]?\d{2,4}[-.\s]?\d{4}$/;
-
+  const { notify } = useNotification();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -131,7 +132,9 @@ const Booking = () => {
             userId
           };
           await axios.post(`/api/booking`, body, config);
+          notify('Congrats, you have successfully booked');
           console.log('Booking added successfully!');
+          setOpenModal(false);
         } catch (error) {
           console.log('Error adding booking:', error);
         }

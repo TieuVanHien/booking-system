@@ -4,6 +4,7 @@ import { AuthenticationContext } from '@/context/authentication';
 import Image from 'next/image';
 import { loginImage } from '@/public/images';
 import Link from 'next/link';
+import { useNotification } from '@/components/notification';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [validError, setValidError] = useState('');
+  const { notify } = useNotification();
 
   const { register } = useContext(AuthenticationContext);
 
@@ -53,7 +55,8 @@ const RegisterPage = () => {
       return;
     }
     try {
-      register(username, firstname, lastname, email, password);
+      await register(username, firstname, lastname, email, password);
+      notify('Registered successfully!');
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
         setError('User with username or email already exists');

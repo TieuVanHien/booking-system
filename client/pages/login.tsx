@@ -1,6 +1,7 @@
 'use client';
 import { useState, useContext } from 'react';
-import { useRouter } from 'next/navigation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 import { loginImage } from '../public/images';
 import Link from 'next/link';
@@ -18,14 +19,16 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(username, password);
+      toast.success('Logined successfully');
     } catch (error: any) {
-      console.error('An error occurred during login:', error);
       setLoginError('Invalid username or password');
+      toast.error('Login successful');
     }
   };
 
   return (
     <section className="login-page">
+      <ToastContainer position="bottom-right" autoClose={5000} />
       <div className="login flex justify-center items-center">
         <div className="left">
           <Image

@@ -1,5 +1,7 @@
-import '../styles/globals.scss';
+import '@/styles/globals.scss';
 import { AuthenticationProvider } from '@/context/authentication';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: 'Create Next App',
@@ -14,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthenticationProvider>
-        <body>{children}</body>
+        <body>
+          <ToastContainer />
+          {children}
+        </body>
       </AuthenticationProvider>
     </html>
   );

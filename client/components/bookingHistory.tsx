@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NewEvent, UserProps } from '@/interfaces/interface';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useNotification } from './notification';
 import axios from 'axios';
 import {
   Button,
@@ -21,6 +22,7 @@ const BookingHistory = () => {
   const [openModal, setOpenModal] = useState(false);
   const [currentBookingId, setCurrentBookingId] = useState<number | null>(null);
   const [filteredDate, setFilterDate] = useState<Date | null>(new Date());
+  const { notify } = useNotification();
 
   const handleOpenModal = async (bookingId: number) => {
     setOpenModal(true);
@@ -101,6 +103,7 @@ const BookingHistory = () => {
       setAllEvents((prevEvents) =>
         prevEvents.filter((event) => event.id !== bookingId)
       );
+      notify('You successfully cancel your booking!');
     } catch (error: any) {
       console.error('Error cancelling booking:', error.message);
     }
